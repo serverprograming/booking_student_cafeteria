@@ -1,0 +1,22 @@
+{
+  "name": "booking_student_cafeteria",
+  "version": "1.0.0",
+  "description": "세종대학교 학생 식당 예약 사이트",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serverprograming/booking_student_cafeteria.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/serverprograming/booking_student_cafeteria/issues"
+  },
+  "homepage": "https://github.com/serverprograming/booking_student_cafeteria#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
