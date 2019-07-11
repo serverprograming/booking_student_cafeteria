@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Menu Detail</title>
+    <script type="text/javascript">
+    $('.starRev span').click(function(){
+        $(this).parent().children('span').removeClass('on');
+        $(this).addClass('on').prevAll('span').addClass('on');
+        return false;
+      });
+    </script>
+    <style>
+      * {
+        margin : 0;
+        padding : 0;
+      }
+
+      /* 별점  */
+      .starR1{
+          background: url('images/MenuDetail/star2.png') no-repeat -52px 0;
+          background-size: auto 100%;
+          width: 7.5px;
+          height: 15px;
+          float:left;
+          text-indent: -9999px;
+          cursor: pointer;
+      }
+      .starR2{
+          background: url('images/MenuDetail/star2.png') no-repeat right 0;
+          background-size: auto 100%;
+          width: 7.5px;
+          height: 15px;
+          float:left;
+          text-indent: -9999px;
+          cursor: pointer;
+      }
+      .starR1.on{background-position:0 0;}
+      .starR2.on{background-position:-15px 0;}
+
+      .starRev{
+        margin-top: 5px;
+
+      }
+
+      /* 고정 레이아웃 */
+      #layer_fixed {
+            height:40px;
+            width:100%;
+            color: #555;
+            font-size:12px;
+            position:fixed;
+            z-index:999;
+            bottom:0px;
+            left:0px;
+            -webkit-box-shadow: 0 1px 2px 0 #777;
+            box-shadow: 0 1px 2px 0 #777;
+            background-color:#ccc;
+      }
+
+      #layer_fixed p{
+        white-space: nowrap;
+        width: 200px;
+        overflow: hidden;
+        text-overflow: clip;
+      }
+
+      .content{
+        width: 50%;
+        margin: 0 auto;
+      }
+
+      .menu-description{
+        float:left;
+      }
+
+      .review-other{
+        border : 1px solid;
+      }
+
+      #cafeteria {
+        text-align: center;
+        margin-top: 25px;
+        margin-bottom: 25px;
+      }
+
+      #menu-name{
+        margin : 10px;
+      }
+
+      #menu-image{
+        margin-left:10px;
+        margin-right:10px;
+        float: left;
+      }
+
+      #menu-detail{
+        margin-left: 10px;
+      }
+
+      #review{
+        margin-top: 15px;
+      }
+
+      .review-other{
+        margin-top: 10px;
+      }
+
+      .menu-description{
+        padding-bottom: 15px;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <div class="content">
+
+      <!-- 헤더 -->
+      <div class="">
+        <header>
+          <div class="" id="cafeteria">
+            <h1>학생 회관</h1>
+          </div>
+        </header>
+      </div>
+
+      <hr>
+
+      <!-- 내용 -->
+      <div class="">
+        <section id = "menu">
+          <div id="menu-name">
+            <h3>소금 구이 덮밥</h3>
+          </div>
+          <div class = "menu-description">
+            <div class="menu-item" id="menu-image">
+              <img src="./images/MenuDetail/test.jpg" alt="" width="300" height="200">
+            </div>
+            <div class="menu-item" id="menu-detail">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+          </div>
+        </section>
+
+        <hr>
+
+        <section id = "review">
+          <div class="rate">
+            <span>평점</span>
+            <span>1.5</span>
+            <div class="starRev">
+              <span class="starR1 on">별1_왼쪽</span>
+              <span class="starR2 on">별1_오른쪽</span>
+              <span class="starR1 on">별2_왼쪽</span>
+              <span class="starR2">별2_오른쪽</span>
+              <span class="starR1">별3_왼쪽</span>
+              <span class="starR2">별3_오른쪽</span>
+              <span class="starR1">별4_왼쪽</span>
+              <span class="starR2">별4_오른쪽</span>
+              <span class="starR1">별5_왼쪽</span>
+              <span class="starR2">별5_오른쪽</span>
+            </div>
+          </div>
+
+          <div class="">
+            <p>댓글</p>
+            <form class="" action="" method="post">
+              <input type="text" name="review" value="">
+              <input type="submit" value="작성">
+            </form>
+
+          </div>
+          <div class="review-other">
+            <span>전세영</span>
+            <span class = "star-rating"><span style="width:50%"></span></span>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+        </section>
+      </div>
+      <div class="">
+        <div id="layer_fixed">
+           <table cellspacing="0" cellpadding="0" style="width:100%; height:100%;">
+           <tr align = "center">
+              <td>
+                  <p>예약하기</p>
+              </td>
+           </tr>
+           </table>
+         </div>
+      </div
+    </div>
+  </body>
+</html>
