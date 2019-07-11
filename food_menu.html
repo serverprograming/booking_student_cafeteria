@@ -1,77 +1,255 @@
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+<!DOCTYPE html>
+<html>
 
-  html,
-  body {
-    height: 100%;
-  }
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  #container {
-    width: 1000px;
-    margin: 0 auto;
-  }
+    #container {
+      width: 1200px;
+      margin: 0 auto;
+    }
+  </style>
 
-  menu {
-    clear: both;
-    height: 33.333%;
-  }
+  <!-- 헤더 타이틀 스타일 -->
+  <style>
+    header {
+      height: 200px;
+    }
 
-  menu p {
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 300;
-    text-align: center;
-    transform: translateY(200%);
-    color: white;
-    font-size: 2.5rem;
-  }
+    header p {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 300;
+      text-align: left;
+      transform: translateY(100%);
+      color: black;
+      font-size: 2.5rem;
+    }
 
-  header {
-    height: 20%;
-  }
+    .hr {
+      border: none;
+      border: 1px solid black;
+    }
+  </style>
 
-  header p {
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 300;
-    text-align: left;
-    transform: translateY(100%);
-    color: black;
-    font-size: 2.5rem;
-  }
+  <!-- 메뉴 아이템 스타일  -->
+  <style>
+    #main-section {
+      width: 1200px;
+      margin: 0 auto;
+    }
 
-  .hr {
-    border:none;
-    border:1px solid black;
-  }
-</style>
+    .menu {
+      width: 300px;
+      margin-top: 30px;
+      padding: 15px 15px 0;
+      font-size: 11px;
+      background: #FFFFFF;
+    }
+
+    .menu-image:hover {
+      opacity: 0.6;
+      color: black;
+    }
+
+    .menu-name {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 500;
+      text-align: left;
+      margin-top: 10px;
+      font-size: 20px;
+    }
+
+    .menu-name:hover {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 500;
+      text-align: left;
+      margin-top: 10px;
+      font-size: 20px;
+      color: #A6A6A6;
+    }
+
+    .menu-price {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 500;
+      text-align: left;
+      margin-top: 5px;
+      font-size: 17px;
+      color: #5D5D5D;
+    }
+
+    .menu-star {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 500;
+      text-align: left;
+      margin: 5px 0;
+      margin-top: 10px;
+      font-size: 15px;
+      color: #A6A6A6;
+      margin-bottom: 20px;
+    }
+  </style>
+  <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="jquery.masonry.min.js"></script>
+  <script src="jquery.imagesloaded.min.js"></script>
+  <script>
+    //페이지
+    $(document).ready(function() {
+      $('#main-section').imagesLoaded(function() {
+        $('#main-section').masonry({
+          itemSelector: '.menu',
+          columnWidth: 300,
+          isAnimated: true
+        });
+      });
+    });
+
+    $(document).ready(function() {
+      var appendDocument = function() {
+        for (var i = 0; i < 30; i++) {
+          var menu = $('<div></div>').addClass('menu');
+          var menu_holder = $('<div></div>').addClass('menu-image');
+          var a_link1 = $('<a></a>');
+          var small_image = $('<img width="190" src="http://placekitten.com/190/328" />');
+          var description_p = $('<p>Lorem ipsum dolor sit amet</p>').addClass('menu-description');
+          var menu_content = $('<div></div>').addClass('menu-content');
+          var a_link2 = $('<a href=\'#\'</a>').addClass('menu-link');
+          var large_image = $('<img src="http://placekitten.com/30/30" />')
+          var menu_text = $('<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sem mi, egestas a facilisis eget, egestas ut magna.</p>').addClass('menu-text');
+          a_link2.append(large_image);
+          menu_content.append(large_image).append(menu_text);
+
+          a_link1.append(small_image);
+          menu_holder.append(a_link1);
+
+          menu.append(menu_holder).append(description_p).append(menu_content);
+
+          var $main_section = $('#main-section').masonry({
+            itemSelector: '.menu',
+            columnWidth: 300,
+            isAnimated: true
+          });
+
+          $main_section.masonry().append(menu).masonry('appended', menu).masonry();
+        }
+      };
+
+      $(window).scroll(function() {
+        var scrollHeight = $(window).scrollTop() + $(window).height();
+        var documentHeight = $(document).height();
+
+        console.log(scrollHeight, documentHeight);
+
+        if (scrollHeight > documentHeight) {
+          appendDocument();
+
+          /*
+          $('.menu').click(function() {
+            var img = $(this).find('.menu-image img').attr('src');
+            $('#lightbox > img').attr('src', img);
+
+            showLightBox();
+          });
+          */
+
+        }
+      });
+    });
+  </script>
+
+</head>
+
 
 <body>
   <div id="container">
+    <!-- 타이틀 -->
     <header>
       <p>군　자　관</p>
     </header>
+    <!-- 구분선 -->
     <hr class="hr">
 
-    <center>
+    <!-- 메뉴들 -->
+    <section id="main-section">
 
+      <div class="menu">
+        <div class="menu-image">
+          <a><img width="270" height="250" src="images/food_menu_images/food.jpg" /></a>
+        </div>
+        <p class="menu-name">소금구이 덮밥</p>
+        <p class="menu-price">4,200원</p>
+        <p class="menu-star">★★★☆☆　3.0</p>
+      </div>
 
-      <!-- action 의 서블릿 요청 경로에 주의 해야함. 서블릿 클래스에 선언된 요청과 같아야 함 -->
-      <form name=form1 action=/jspbook/CalcServlet method=post>
-        <input TYPE="text" NAME="num1" width=200 size="5">
-        <select NAME="operator">
-          <option selected>+</option>
-          <option>-</option>
-          <option>*</option>
-          <option>/</option>
-        </select>
-        <input TYPE="text" NAME="num2" width=200 size="5">
-        <input type="submit" value="계산" name="B1"> <input type="reset" value="다시입력" name="B2">
-      </form>
-    </center>
+      <div class="menu">
+        <div class="menu-image">
+          <a><img width="270" height="250" src="images/food_menu_images/food.jpg" /></a>
+        </div>
+        <p class="menu-name">소금구이 덮밥</p>
+        <p class="menu-price">4,200원</p>
+        <p class="menu-star">★★★☆☆　3.0</p>
+      </div>
+
+      <div class="menu">
+        <div class="menu-image">
+          <a><img width="270" height="250" src="images/food_menu_images/food.jpg" /></a>
+        </div>
+        <p class="menu-name">소금구이 덮밥</p>
+        <p class="menu-price">4,200원</p>
+        <p class="menu-star">★★★☆☆　3.0</p>
+      </div>
+
+      <div class="menu">
+        <div class="menu-image">
+          <a><img width="270" height="250" src="images/food_menu_images/food.jpg" /></a>
+        </div>
+        <p class="menu-name">소금구이 덮밥</p>
+        <p class="menu-price">4,200원</p>
+        <p class="menu-star">★★★☆☆　3.0</p>
+      </div>
+
+      <div class="menu">
+        <div class="menu-image">
+          <a><img width="270" height="250" src="images/food_menu_images/food.jpg" /></a>
+        </div>
+        <p class="menu-name">소금구이 덮밥</p>
+        <p class="menu-price">4,200원</p>
+        <p class="menu-star">★★★☆☆　3.0</p>
+      </div>
+      <div class="menu">
+        <div class="menu-image">
+          <a><img width="270" height="250" src="images/food_menu_images/food.jpg" /></a>
+        </div>
+        <p class="menu-name">소금구이 덮밥</p>
+        <p class="menu-price">4,200원</p>
+        <p class="menu-star">★★★☆☆　3.0</p>
+      </div>
+      <div class="menu">
+        <div class="menu-image">
+          <a><img width="270" height="250" src="images/food_menu_images/food.jpg" /></a>
+        </div>
+        <p class="menu-name">소금구이 덮밥</p>
+        <p class="menu-price">4,200원</p>
+        <p class="menu-star">★★★☆☆　3.0</p>
+      </div>
+      <div class="menu">
+        <div class="menu-image">
+          <a><img width="270" height="250" src="images/food_menu_images/food.jpg" /></a>
+        </div>
+        <p class="menu-name">소금구이 덮밥</p>
+        <p class="menu-price">4,200원</p>
+        <p class="menu-star">★★★☆☆　3.0</p>
+      </div>
+    </section>
+
   </div>
 
 </body>
+
+</html>
