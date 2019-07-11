@@ -1,0 +1,77 @@
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  #container {
+    width: 1000px;
+    margin: 0 auto;
+  }
+
+  menu {
+    clear: both;
+    height: 33.333%;
+  }
+
+  menu p {
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 300;
+    text-align: center;
+    transform: translateY(200%);
+    color: white;
+    font-size: 2.5rem;
+  }
+
+  header {
+    height: 20%;
+  }
+
+  header p {
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 300;
+    text-align: left;
+    transform: translateY(100%);
+    color: black;
+    font-size: 2.5rem;
+  }
+
+  .hr {
+    border:none;
+    border:1px solid black;
+  }
+</style>
+
+<body>
+  <div id="container">
+    <header>
+      <p>군　자　관</p>
+    </header>
+    <hr class="hr">
+
+    <center>
+
+
+      <!-- action 의 서블릿 요청 경로에 주의 해야함. 서블릿 클래스에 선언된 요청과 같아야 함 -->
+      <form name=form1 action=/jspbook/CalcServlet method=post>
+        <input TYPE="text" NAME="num1" width=200 size="5">
+        <select NAME="operator">
+          <option selected>+</option>
+          <option>-</option>
+          <option>*</option>
+          <option>/</option>
+        </select>
+        <input TYPE="text" NAME="num2" width=200 size="5">
+        <input type="submit" value="계산" name="B1"> <input type="reset" value="다시입력" name="B2">
+      </form>
+    </center>
+  </div>
+
+</body>
