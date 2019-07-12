@@ -103,8 +103,19 @@
     $(document).ready(function() {
 
       var cafeteria = location.href.substr(location.href.lastIndexOf('=') + 1);
-      console.log('cafeteria : ' + cafeteria);
-
+      var title;
+      switch (cafeteria) {
+        case '1':
+          title = '학　생　회　관';
+          break;
+        case '2':
+          title = '군　자　키　친';
+          break;
+        case '3':
+          title = '진　관　키　친';
+          break;
+      }
+      $('header').html('<p>' + title + '</p>');
 
       $('#main-section').imagesLoaded(function() {
         $('#main-section').masonry({
