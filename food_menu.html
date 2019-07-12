@@ -102,6 +102,8 @@
     //페이지
     $(document).ready(function() {
 
+      // 인덱스 값에 따라 페이지 타이틀 다르게 설정
+      // 1: 학생회관, 2:군자키친, 3:진관키친
       var cafeteria = location.href.substr(location.href.lastIndexOf('=') + 1);
       var title;
       switch (cafeteria) {
@@ -117,6 +119,7 @@
       }
       $('header').html('<p>' + title + '</p>');
 
+      // masonry 라이브러리 적용
       $('#main-section').imagesLoaded(function() {
         $('#main-section').masonry({
           itemSelector: '.menu',
@@ -124,58 +127,40 @@
           isAnimated: true
         });
       });
-    });
 
-    $(document).ready(function() {
-      var appendDocument = function() {
-        for (var i = 0; i < 30; i++) {
-          var menu = $('<div></div>').addClass('menu');
-          var menu_holder = $('<div></div>').addClass('menu-image');
-          var a_link1 = $('<a></a>');
-          var small_image = $('<img width="190" src="http://placekitten.com/190/328" />');
-          var description_p = $('<p>Lorem ipsum dolor sit amet</p>').addClass('menu-description');
-          var menu_content = $('<div></div>').addClass('menu-content');
-          var a_link2 = $('<a href=\'#\'</a>').addClass('menu-link');
-          var large_image = $('<img src="http://placekitten.com/30/30" />')
-          var menu_text = $('<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sem mi, egestas a facilisis eget, egestas ut magna.</p>').addClass('menu-text');
-          a_link2.append(large_image);
-          menu_content.append(large_image).append(menu_text);
-
-          a_link1.append(small_image);
-          menu_holder.append(a_link1);
-
-          menu.append(menu_holder).append(description_p).append(menu_content);
-
+      // 메뉴아이템 붙이기
+      var appendMenu = function() {
+        for (var i = 0; i < 20; i++) {
           var $main_section = $('#main-section').masonry({
             itemSelector: '.menu',
             columnWidth: 300,
             isAnimated: true
           });
 
+          var menu = $('<div></div>').addClass('menu');
+          var menu_image = $('<div></div>').addClass('menu-image');
+          var a_link = $('<a></a>');
+          var image = $('<img width="270" height="250" src="images/food_menu_images/food.jpg" />');
+          var menu_name = $('<p>소금구이 덮밥</p>').addClass('menu-name');
+          var menu_price = $('<p>4,200원</p>').addClass('menu-price');
+          var menu_star = $('<p>★★★☆☆　3.0</p>').addClass('menu-star');
+
+          a_link.append(image);
+          menu_image.append(a_link);
+          menu.append(menu_image).append(menu_name).append(menu_price).append(menu_star);
           $main_section.masonry().append(menu).masonry('appended', menu).masonry();
         }
       };
 
+      // 무한스크롤 메뉴 더 불러오기
       $(window).scroll(function() {
         var scrollHeight = $(window).scrollTop() + $(window).height();
         var documentHeight = $(document).height();
-
-        console.log(scrollHeight, documentHeight);
-
-        if (scrollHeight > documentHeight) {
-          appendDocument();
-
-          /*
-          $('.menu').click(function() {
-            var img = $(this).find('.menu-image img').attr('src');
-            $('#lightbox > img').attr('src', img);
-
-            showLightBox();
-          });
-          */
-
+        if (scrollHeight >= documentHeight) {
+          appendMenu();
         }
       });
+
     });
   </script>
 
