@@ -14,8 +14,7 @@
     html,
     body {
       background: #6A635A;
-      height:100%
-
+      height: 100%
     }
 
     #container {
@@ -70,24 +69,23 @@
   </style>
 
   <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="jquery.masonry.min.js"></script>
-  <script src="jquery.imagesloaded.min.js"></script>
   <script>
-    //페이지
-    $(document).ready(function() {});
+    function setValue(index) {
+      window.location.href = "food_menu.html?index=" + index;
+    }
   </script>
 
 </head>
 
 <body>
   <div id="container">
-    <menu id="menu1">
+    <menu id="menu1" onclick="setValue(1)">
       <p>학　생　회　관</p>
     </menu>
-    <menu id="menu2">
+    <menu id="menu2" onclick="setValue(2)">
       <p>군　자　관</p>
     </menu>
-    <menu id="menu3">
+    <menu id="menu3" onclick="setValue(3)">
       <p>진　관　홀</p>
     </menu>
   </div>

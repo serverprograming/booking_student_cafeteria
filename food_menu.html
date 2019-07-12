@@ -101,6 +101,11 @@
   <script>
     //페이지
     $(document).ready(function() {
+
+      var cafeteria = location.href.substr(location.href.lastIndexOf('=') + 1);
+      console.log('cafeteria : ' + cafeteria);
+
+
       $('#main-section').imagesLoaded(function() {
         $('#main-section').masonry({
           itemSelector: '.menu',
