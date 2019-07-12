@@ -3,12 +3,85 @@
   <head>
     <meta charset="utf-8">
     <title>Menu Detail</title>
+
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script type="text/javascript">
-    $('.starRev span').click(function(){
+    $(document).ready(function () {
+
+      // 예약 가능 시간 로드 함수
+      function loadTimeSelect(){
+
+        for (var hour= 9 ; hour < 20 ; hour ++){
+          var minute = 0;
+          for(var i = 0 ; i< 6; i++){
+            var option = $('<option>'+ hour + '시' + minute + '분</option>');
+            minute += 10;
+            $('#time').append(option);
+          }
+        }
+      }
+
+      // 사용자 댓글 로드 함수
+
+      function loadReply(){
+
+      }
+
+      loadTimeSelect();
+
+      $('.button').click(function(){
+        var current_selectedTime = $('#time option:selected').text();
+        if(current_selectedTime == "시간 선택"){
+          alert("시간을 설정해주세요");
+        }
+        else{
+          var result = confirm(current_selectedTime + ' 시간에 예약하시겠습니까?');
+          if(result){
+            var cafeteria = '학생 회관';
+            var menu = '소금 구이 덮밥';
+            var time = current_selectedTime;
+            var complete = '0';
+            var obj = JSON.parse('{ "name":"John", "age":30, "city":"New York"}');
+
+            var jsonObject = {
+              caefeteria : cafeteria,
+              menu : menu,
+              time : time,
+              user_id : "seyoung1219",
+              complte : '0'
+            };
+            var url = "http://localhost:8080/MenuDetail/reserve";
+
+            $.post(url, jsonObject, function(result){
+              console.log(result);
+            });
+            // $.ajax({
+            //   url:"http://localhost:8080/MenuDetail/reserve",
+            //   type:"post",
+            //   data: jsonObject,
+            //   success:function(result){
+            //     console.log(result);
+            //    }
+            //  });
+          }
+          else{
+
+          }
+        }
+
+      })
+
+      $('.rate > .starRev span').click(function(){
+        $('.textRate > p').remove();
         $(this).parent().children('span').removeClass('on');
         $(this).addClass('on').prevAll('span').addClass('on');
+        var average = ($(this).prevAll().length + 1).toFixed(1) ;
+        $('.textRate').prepend('<p>평점 : '+ average + '</p>');
         return false;
       });
+
+
+    });
     </script>
     <style>
       * {
@@ -18,19 +91,19 @@
 
       /* 별점  */
       .starR1{
-          background: url('images/MenuDetail/star2.png') no-repeat -52px 0;
+          background: url('images/MenuDetail/star.png') no-repeat -52px 0;
           background-size: auto 100%;
-          width: 7.5px;
-          height: 15px;
+          width: 15px;
+          height: 30px;
           float:left;
           text-indent: -9999px;
           cursor: pointer;
       }
       .starR2{
-          background: url('images/MenuDetail/star2.png') no-repeat right 0;
+          background: url('images/MenuDetail/star.png') no-repeat right 0;
           background-size: auto 100%;
-          width: 7.5px;
-          height: 15px;
+          width: 15px;
+          height: 30px;
           float:left;
           text-indent: -9999px;
           cursor: pointer;
@@ -40,7 +113,6 @@
 
       .starRev{
         margin-top: 5px;
-
       }
 
       /* 고정 레이아웃 */
@@ -71,6 +143,8 @@
       }
 
       .menu-description{
+        margin-top: 15p;
+        margin-bottom: 15px;
         float:left;
       }
 
@@ -78,24 +152,21 @@
         border : 1px solid;
       }
 
-      #cafeteria {
+      #menu-name{
         text-align: center;
         margin-top: 25px;
         margin-bottom: 25px;
       }
 
-      #menu-name{
-        margin : 10px;
-      }
-
       #menu-image{
+        margin-top: 15px;
         margin-left:10px;
         margin-right:10px;
         float: left;
       }
 
       #menu-detail{
-        margin-left: 10px;
+        margin-top: 15px;
       }
 
       #review{
@@ -106,9 +177,75 @@
         margin-top: 10px;
       }
 
-      .menu-description{
-        padding-bottom: 15px;
+      .write-reply{
+        margin-top: 10px;
+        margin-bottom: 10px;
       }
+
+      input[type=text] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      input[type=submit] {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        float: left;
+      }
+
+      .select-style {
+          border: 1px solid #ccc;
+          height: 30px;
+          width: 200px;
+          border-radius: 3px;
+          overflow: hidden;
+          text-align-last:center;
+          font-size: 1em;
+          padding-top:  4px;
+          float:left;
+          margin-left: 5px;
+          margin-right: 5px;
+          margin-top: 10px;
+      }
+
+      .select-style select {
+          padding: 5px 8px;
+          width: 200px;
+          border: none;
+          box-shadow: none;
+          background: transparent;
+          background-image: none;
+          -webkit-appearance: none;
+      }
+
+      .select-style select:focus {
+          outline: none
+      }
+
 
 
     </style>
@@ -119,8 +256,8 @@
       <!-- 헤더 -->
       <div class="">
         <header>
-          <div class="" id="cafeteria">
-            <h1>학생 회관</h1>
+          <div id="menu-name">
+            <h1>소금 구이 덮밥</h1>
           </div>
         </header>
       </div>
@@ -130,15 +267,21 @@
       <!-- 내용 -->
       <div class="">
         <section id = "menu">
-          <div id="menu-name">
-            <h3>소금 구이 덮밥</h3>
-          </div>
           <div class = "menu-description">
             <div class="menu-item" id="menu-image">
-              <img src="./images/MenuDetail/test.jpg" alt="" width="300" height="200">
+              <img src="./images/MenuDetail/test.jpg" alt="" width="350" height="250">
             </div>
             <div class="menu-item" id="menu-detail">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+              <h2>가격 4500원 </h2>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+            </div>
+            <div class="menu-item" id = "menu-time">
+              <div class="select-style">
+                <select id="time">
+                  <option selected>시간 선택</option>
+                </select>
+              </div>
+              <button class="button">예약 하기</button>
             </div>
           </div>
         </section>
@@ -146,13 +289,39 @@
         <hr>
 
         <section id = "review">
-          <div class="rate">
-            <span>평점</span>
-            <span>1.5</span>
+          <div class="write-reply">
+            <form class="" action="" method="post">
+              <div class="rate">
+                <div class="starRev">
+                  <span class="starR1">별1_왼쪽</span>
+                  <span class="starR2">별1_오른쪽</span>
+                  <span class="starR1">별2_왼쪽</span>
+                  <span class="starR2">별2_오른쪽</span>
+                  <span class="starR1">별3_왼쪽</span>
+                  <span class="starR2">별3_오른쪽</span>
+                  <span class="starR1">별4_왼쪽</span>
+                  <span class="starR2">별4_오른쪽</span>
+                  <span class="starR1">별5_왼쪽</span>
+                  <span class="starR2">별5_오른쪽</span>
+                </div>
+                <div class="textRate">
+                  <p>평점 : 0.0</p>
+                <div>
+              </div>
+              <br style="clear:both">
+              <input type="text" name="review" value="" placeholder="댓글을 작성해주세요..">
+              <input type="submit" value="작성">
+            </form>
+          </div>
+
+          <div class="review-other">
+            <div id="nickname">
+              <p>전세영</p>
+            </div>
             <div class="starRev">
-              <span class="starR1 on">별1_왼쪽</span>
-              <span class="starR2 on">별1_오른쪽</span>
-              <span class="starR1 on">별2_왼쪽</span>
+              <span class="starR1">별1_왼쪽</span>
+              <span class="starR2">별1_오른쪽</span>
+              <span class="starR1">별2_왼쪽</span>
               <span class="starR2">별2_오른쪽</span>
               <span class="starR1">별3_왼쪽</span>
               <span class="starR2">별3_오른쪽</span>
@@ -161,32 +330,23 @@
               <span class="starR1">별5_왼쪽</span>
               <span class="starR2">별5_오른쪽</span>
             </div>
-          </div>
-
-          <div class="">
-            <p>댓글</p>
-            <form class="" action="" method="post">
-              <input type="text" name="review" value="">
-              <input type="submit" value="작성">
-            </form>
-
-          </div>
-          <div class="review-other">
-            <span>전세영</span>
-            <span class = "star-rating"><span style="width:50%"></span></span>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <div class="textRate">
+              <p>평점 : 0.0</p>
+            <div>
+            <br style="clear:both">
+            <p>댓글 냥냥이</p>
           </div>
         </section>
       </div>
       <div class="">
-        <div id="layer_fixed">
+        <!-- <div id="layer_fixed">
            <table cellspacing="0" cellpadding="0" style="width:100%; height:100%;">
            <tr align = "center">
               <td>
                   <p>예약하기</p>
               </td>
            </tr>
-           </table>
+           </table> -->
          </div>
       </div
     </div>
