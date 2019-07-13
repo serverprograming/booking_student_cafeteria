@@ -52,7 +52,7 @@ app.post('/MenuDetail/menu_data_load', (req,res) => {
   var cafeteria = req.body.cafeteria;
   var menu = req.body.menu;
 
-  var menu_data_sql = "select image,content FROM menu where cafeteria='"+ cafeteria +"' and name='"+ menu +"'";
+  var menu_data_sql = "select image,content,price FROM menu where cafeteria='"+ cafeteria +"' and name='"+ menu +"'";
   console.log(menu_data_sql);
   con.query(menu_data_sql,function(err,result){
     if(err){
@@ -96,17 +96,17 @@ app.post('/MenuDetail/reserve', (req,res) => {
   var time = req.body.time;
   var user_id = req.body.user_id;
   var complete = req.body.complete;
+  var image_src = req.body.image_src;
+  var price = req.body.menu_price;
 
-  console.log(cafeteria,menu,time,user_id,complete);
-
-  var sql = "INSERT INTO reserve (id,cafeteria,menu,time,complete,user_id) VALUES (NULL,'"+cafeteria+"','"+menu
-  +"','"+time+"','"+complete+"','"+user_id+"')";
+  var sql = "INSERT INTO reserve (id,cafeteria,menu,time,complete,user_id,image_src,price) VALUES (NULL,'"+cafeteria+"','"+menu
+  +"','"+time+"','"+complete+"','"+user_id+"','"+image_src+"','"+price+"')";
   console.log(sql);
   con.query(sql, function(err, result){
     if (err){
       throw err;
     }
-    console.log("1 record inserted");
+    res.send('예약 완료');
   })
 });
 

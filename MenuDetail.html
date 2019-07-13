@@ -5,14 +5,21 @@
   <meta charset="utf-8">
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
   <title>Menu Detail</title>
+  <!--Stylesheets-->
+	<link href="modal_css/jquery.modal.css" type="text/css" rel="stylesheet" />
+	<link href="modal_css/jquery.modal.theme-xenon.css" type="text/css" rel="stylesheet" />
+	<link href="modal_css/jquery.modal.theme-atlant.css" type="text/css" rel="stylesheet" />
 
   <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="modal_js/jquery.modal.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       var data1 = location.href.substr(location.href.lastIndexOf('?') + 1);
       var data2 = data1.split("&");
       var cafeteria = decodeURI(data2[0].substr(data2[0].lastIndexOf('=') + 1));
       var menu = decodeURI(data2[1].substr(data2[1].lastIndexOf('=') + 1));
+      var image_src;
+      var menu_price;
 
       //자릿수 채워주는 함수
       function pad(n, width) {
@@ -44,16 +51,16 @@
         var url = "http://localhost:8080/MenuDetail/menu_data_load";
 
         $.post(url, jsonObject, function(result) {
+          console.log(result);
           var image = result[0]['image'];
+          image_src = image;
           var content = result[0]['content'];
-
-          var menu_image = $('<div></div>').addClass('menu-image');
-          var image = $('  <img width="700" height="500" src="' + image +'" alt="">');
-          var menu_text = $('<div></div>').addClass('text');
-          var menu_name = $('<p>'+ menu +'</p>');
-          var menu_detail = $('<p>'+ content + '</p>');
-          var menu_starRate = $('<div></div>').addClass('starRate');
-          menu_image.append(image);
+          var price = result[0]['price'];
+          menu_price = price;
+          $(".menu-image img").attr("src", image);
+          $('.menu-name').text(menu);
+          $('.menu-detail').text(content);
+          $('.menu-price').text(price+'원');
         });
       }
 
@@ -110,35 +117,78 @@
 
       $('.button').click(function() {
         var current_selectedTime = $('#time option:selected').text();
+
         if (current_selectedTime == "시간 선택") {
-          alert("시간을 설정해주세요");
-        } else {
-          var result = confirm(current_selectedTime + ' 시간에 예약하시겠습니까?');
-          if (result) {
-            var cafeteria = '학생 회관';
-            var menu = '소금 구이 덮밥';
-            var time = current_selectedTime;
-            var user_id = 'seyoung1219';
-            var complete = '0';
-
-            var jsonObject = {
-              cafeteria: cafeteria,
-              menu: menu,
-              time: time,
-              user_id: user_id,
-              complete: '0'
-            };
-
-            var url = "http://localhost:8080/MenuDetail/reserve";
-
-            $.post(url, jsonObject, function(result) {
-              console.log(result);
-            });
-          } else {
-
-          }
+          modal({
+    				type: 'alert',
+    				title: '알림',
+    				text: "시간을 설정해주세요"
+    			});
         }
+        else {
+          var devide_time = current_selectedTime.split(":");
+          var hour = devide_time[0].trim();
+          var minute = devide_time[1].trim();
 
+          modal({
+            type: 'confirm',
+            title: '예약 확인',
+            text: hour +'시 '+ minute + '분에 예약을 진행하시겠습니까?',
+            callback: function(result) {
+              if(result){
+                var newDate = new Date();
+                var day;
+                switch (newDate.getDay()) {
+                  case 0: day = '일'
+                    break;
+                  case 1: day = '월'
+                    break;
+                  case 2: day = '화'
+                    break;
+                  case 3: day = '수'
+                    break;
+                  case 4: day = '목'
+                    break;
+                  case 5: day = '금'
+                    break;
+                  case 6: day = '토'
+                    break;
+                  default:
+                }
+                var time = newDate.getFullYear() +'-' + (newDate.getMonth()+1)+'-'+newDate.getDate()+' ('+day+') '+hour+'시 ' +minute +'분';
+
+                var user_id = 'seyoung1219';
+                var complete = '0';
+
+                var jsonObject = {
+                  cafeteria: cafeteria,
+                  menu: menu,
+                  time: time,
+                  user_id: user_id,
+                  image_src: image_src,
+                  menu_price : menu_price,
+                  complete: '0'
+                };
+
+                var url = "http://localhost:8080/MenuDetail/reserve";
+
+                $.post(url, jsonObject, function(result) {
+                  modal({
+                    type: 'alert',
+                    title: '알림',
+                    text: result
+                  });
+                });
+              } else{
+                modal({
+          				type: 'alert',
+          				title: '알림',
+          				text: "예약을 취소하였습니다"
+          			});
+              }
+            }
+          });
+        }
       })
 
       $('#write-review .starRev span').click(function() {
