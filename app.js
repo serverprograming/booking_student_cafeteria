@@ -30,8 +30,6 @@ app.use(express.json());
 
 app.set('port', process.env.PORT || 8080);
 
-app.set('port', process.env.PORT || 8080);
-
 app.get('/', function(req,res){
   res.redirect('main_login.html');
 });
@@ -94,6 +92,8 @@ app.post('/MenuDetail/reserve', (req,res) => {
     console.log("1 record inserted");
   })
 });
+
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Server Start...' + app.get('port'));
