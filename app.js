@@ -30,8 +30,10 @@ app.use(express.json());
 
 app.set('port', process.env.PORT || 8080);
 
-app.get('/', function(res,req){
-  res.redirect('main.html');
+app.set('port', process.env.PORT || 8080);
+
+app.get('/', function(req,res){
+  res.redirect('main_login.html');
 });
 
 //Menu Detail
