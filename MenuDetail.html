@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Menu Detail</title>
 
-    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function () {
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
+  <title>Menu Detail</title>
+
+  <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
       var cafeteria_id = decodeURI(location.href.substr(location.href.lastIndexOf('=') + 1));
       var menu_id = decodeURI(location.href.substr(location.href.lastIndexOf('=') + 2));
 
@@ -20,12 +22,12 @@
       }
 
       // 예약 가능 시간 로드 함수
-      function loadTimeSelect(){
+      function loadTimeSelect() {
 
-        for (var hour= 9 ; hour < 20 ; hour ++){
+        for (var hour = 9; hour < 20; hour++) {
           var minute = 0;
-          for(var i = 0 ; i< 6; i++){
-            var option = $('<option>'+ hour + ' : ' + pad(minute,2) + '</option>');
+          for (var i = 0; i < 6; i++) {
+            var option = $('<option>' + hour + ' : ' + pad(minute, 2) + '</option>');
             minute += 10;
             $('#time').append(option);
           }
@@ -33,16 +35,16 @@
       }
 
       // 메뉴 데이터 로드
-      function load_menu_data(cafeteria,menu){
+      function load_menu_data(cafeteria, menu) {
 
         var jsonObject = {
-          cafeteria : cafeteria,
-          menu : menu
+          cafeteria: cafeteria,
+          menu: menu
         };
 
         var url = "http://localhost:8080/MenuDetail/menu_data_load";
 
-        $.post(url, jsonObject, function(result){
+        $.post(url, jsonObject, function(result) {
           var image = result[0]['image'];
           var content = result[0]['content'];
 
@@ -50,17 +52,17 @@
       }
 
       // 사용자 댓글 데이터 로드
-      function load_reply_data(cafeteria,menu){
+      function load_reply_data(cafeteria, menu) {
 
         var jsonObject = {
-          cafeteria : cafeteria,
-          menu : menu
+          cafeteria: cafeteria,
+          menu: menu
         };
 
         var url = "http://localhost:8080/MenuDetail/reply_data_load";
 
-        $.post(url, jsonObject, function(result){
-          for(var i=0; i<result.length; i++){
+        $.post(url, jsonObject, function(result) {
+          for (var i = 0; i < result.length; i++) {
             var nickname = result[i]["nickname"];
             var content = result[i]["content"];
             var star = result[i]["star"];
@@ -69,19 +71,18 @@
         });
       }
 
-      load_menu_data(cafeteria,menu);
-      load_reply_data(cafeteria,menu);
+      load_menu_data(cafeteria, menu);
+      load_reply_data(cafeteria, menu);
 
       loadTimeSelect();
 
-      $('.button').click(function(){
+      $('.button').click(function() {
         var current_selectedTime = $('#time option:selected').text();
-        if(current_selectedTime == "시간 선택"){
+        if (current_selectedTime == "시간 선택") {
           alert("시간을 설정해주세요");
-        }
-        else{
+        } else {
           var result = confirm(current_selectedTime + ' 시간에 예약하시겠습니까?');
-          if(result){
+          if (result) {
             var cafeteria = '학생 회관';
             var menu = '소금 구이 덮밥';
             var time = current_selectedTime;
@@ -89,294 +90,353 @@
             var complete = '0';
 
             var jsonObject = {
-              cafeteria : cafeteria,
-              menu : menu,
-              time : time,
-              user_id : user_id,
-              complete : '0'
+              cafeteria: cafeteria,
+              menu: menu,
+              time: time,
+              user_id: user_id,
+              complete: '0'
             };
 
             var url = "http://localhost:8080/MenuDetail/reserve";
 
-            $.post(url, jsonObject, function(result){
+            $.post(url, jsonObject, function(result) {
               console.log(result);
             });
-          }
-          else{
+          } else {
 
           }
         }
 
       })
 
-      $('#write-review .starRev span').click(function(){
+      $('#write-review .starRev span').click(function() {
         $(this).parent().children('span').removeClass('on');
         $(this).addClass('on').prevAll('span').addClass('on');
-        var average = ($(this).prevAll().length + 1).toFixed(1) ;
+        var average = ($(this).prevAll().length + 1).toFixed(1);
         return false;
       });
 
 
     });
-    </script>
-    <style>
-      * {
-        margin : 0;
-        padding : 0;
-      }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-      /* 별점  */
-      .starR1{
-          background: url('images/MenuDetail/star.png') no-repeat -52px 0;
-          background-size: auto 100%;
-          width: 15px;
-          height: 30px;
-          float:left;
-          text-indent: -9999px;
-          cursor: pointer;
-      }
-      .starR2{
-          background: url('images/MenuDetail/star.png') no-repeat right 0;
-          background-size: auto 100%;
-          width: 15px;
-          height: 30px;
-          float:left;
-          text-indent: -9999px;
-          cursor: pointer;
-      }
-      .starR1.on{background-position:0 0;}
-      .starR2.on{background-position:-15px 0;}
+    /* 별점  */
+    .starR1 {
+      background: url('images/MenuDetail/star.png') no-repeat -52px 0;
+      background-size: auto 100%;
+      width: 15px;
+      height: 30px;
+      float: left;
+      text-indent: -9999px;
+      cursor: pointer;
+    }
 
-      .starRev{
-        margin-top: 30px;
-      }
+    .starR2 {
+      background: url('images/MenuDetail/star.png') no-repeat right 0;
+      background-size: auto 100%;
+      width: 15px;
+      height: 30px;
+      float: left;
+      text-indent: -9999px;
+      cursor: pointer;
+    }
 
-      .content{
-        width: 50%;
-        margin: 0 auto;
-      }
+    .starR1.on {
+      background-position: 0 0;
+    }
 
-      .menu-description{
-        margin-top: 20px;
-        margin-bottom: 40px;
-      }
+    .starR2.on {
+      background-position: -15px 0;
+    }
 
-      .review-other{
-        border : 1px solid;
-      }
+    .starRev {
+      margin-top: 30px;
+    }
 
-      #menu-name{
-        text-align: left;
-        font-size: 22px;
-        font-weight: normal;
-      }
+    .content {
+      width: 1200px;
+      margin: 0 auto;
+    }
 
-      #menu-price{
-        text-align: right;
-      }
+    .menu-description {
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
 
-      #menu-detail{
-        margin-top: 15px;
-      }
+    .review-other {
+      border: 1px solid;
+    }
 
-      #review{
-        margin-top: 15px;
-      }
+    #menu-name {
+      text-align: left;
+      font-size: 22px;
+      font-weight: normal;
+    }
 
-      .review-other{
-        margin-top: 10px;
-      }
+    #menu-price {
+      text-align: right;
+    }
 
-      .write-reply{
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
+    #menu-detail {
+      margin-top: 15px;
+    }
 
-      input[type=text] {
-        width: 80%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-      }
+    #review {
+      margin-top: 15px;
+    }
 
-      input[type=submit] {
-        width: 19%;
-        background-color: #4CAF50;
-        color: white;
-        padding: 12px 20px;
-        margin: 8px 0;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        display: inline-block;
-      }
+    .review-other {
+      margin-top: 10px;
+    }
 
-      .button {
-        background-color: #4CAF50; /* Green */
-        border: none;
-        color: white;
-        padding: 8px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin-top: 20px;
-        margin-left: 6px;
-        cursor: pointer;
-        float: left;
-        height: 51px;
-        width: 171px;
+    .write-reply {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
 
-      }
+    input[type=text] {
+      width: 80%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
 
-      .select-style {
-          border: 1px solid #ccc;
-          height: 40px;
-          width: 170px;
-          border-radius: 3px;
-          overflow: hidden;
-          text-align-last:center;
-          font-size: 1em;
-          padding-top: 10px;
-          float:left;
-          margin-left: 5px;
-          margin-right: 5px;
-          margin-top: 20px;
-      }
+    input[type=submit] {
+      width: 19%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
 
-      .select-style select {
-          padding: 5px 8px;
-          width: 170px;
-          border: none;
-          box-shadow: none;
-          font-size: 18px;
-          background: transparent;
-          background-image: none;
-          -webkit-appearance: none;
-      }
+    .select-style {
+      border: 1px solid #ccc;
+      height: 40px;
+      width: 170px;
+      border-radius: 3px;
+      overflow: hidden;
+      text-align-last: center;
+      font-size: 1em;
+      padding-top: 10px;
+      float: left;
+      margin-left: 5px;
+      margin-right: 5px;
+      margin-top: 20px;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 300;
+      vertical-align: middle;
+    }
 
-      .select-style select:focus {
-          outline: none
-      }
+    .select-style select {
+      padding: 5px 8px;
+      width: 170px;
+      border: none;
+      box-shadow: none;
+      font-size: 18px;
+      background: transparent;
+      background-image: none;
+      -webkit-appearance: none;
+    }
 
-      #cafeteria{
-          height: 100px;
-      }
+    .select-style select:focus {
+      outline: none
+    }
 
-      #cafeteria > p{
-        text-align: left;
-        font-size : 25px;
-        letter-spacing: 25px;
-        line-height: 100px;
-      }
+    #cafeteria {
+      height: 200px;
+    }
 
-      .menu-image{
-        width: 50%;
-        display: block;
-        float: left;
-        margin-right: 2%;
-      }
-      .text{
-        width: 48%;
-        float: left;
-      }
+    #cafeteria>p {
+      letter-spacing: 25px;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 300;
+      text-align: left;
+      transform: translateY(100%);
+      color: black;
+      font-size: 2.5rem;
+    }
 
-      .menu-image > img{
-        width: 100%;
-        max-width: 400px;
-        height: 250px;
-        margin-bottom: 30px;
-      }
+    .menu-image {
+      float: left;
+    }
 
-      .menu-name{
-        font-size :20px;
-        font-weight: normal;
-        margin-bottom: 10px;
-      }
+    .text {
+      width: 450px;
+      float: right;
+    }
 
-      .starRate{
-        float: left;
-        margin :4px;
-        padding-left: 10px;
-        font-size: 20px
-      }
+    .menu-description {
+      padding-top: 50px;
+      height: 510px;
+    }
 
-      #write-review .starRev{
-        margin-top: 10px;
-      }
+    .menu-name {
+      font-family: "Noto Sans KR", sans-serif;
+      text-align: left;
+      font-weight: 500;
+      font-size: 35px;
+      margin-bottom: 20px;
+    }
 
-      .nickname{
-        width: 25%;
-        float: left;
-      }
+    .menu-detail {
+      font-family: "Noto Sans KR", sans-serif;
+      text-align: left;
+      font-weight: 300;
+      font-size: 30px;
+      margin-bottom: 10px;
+      max-height: 100px;
+    }
 
-      .review-content{
-        width:50%;
-        float: left;
-      }
+    .menu-price {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 300;
+      text-align: left;
+      font-size: 35px;
+      font-weight: normal;
+      margin-bottom: 5px;
+      margin-top: 15px;
+      margin-left: 10px;
+    }
 
-      .review-star{
-        width: 25%;
-        float: left;
-      }
+    .starRate {
+      float: left;
+      margin-left: 4px;
+      padding-left: 10px;
+      font-size: 25px;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
+      vertical-align: middle;
+      color: #A6A6A6
+    }
 
-    </style>
-  </head>
-  <body>
-    <div class="content">
+    #write-review .starRev {
+      margin-top: 10px;
+    }
 
-      <!-- 헤더 -->
-      <header>
-        <div id="cafeteria">
-          <p>학생회관</p>
+    .nickname {
+      width: 20%;
+      float: left;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
+      font-size: 25px;
+    }
+
+    .review-content {
+      width: 62%;
+      float: left;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 300;
+      font-size: 25px;
+    }
+
+    .review-star {
+      width: 18%;
+      float: left;
+    }
+
+    .hr {
+      border: none;
+      border: 1px solid black;
+    }
+
+    .hr2 {
+      border: none;
+      border: 0.8px solid #D5D5D5;
+    }
+
+    #time {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 30px;
+    }
+
+    .button {
+      background-color: #385723;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 8px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 20px;
+      margin-left: 6px;
+      cursor: pointer;
+      float: left;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 30px;
+    }
+
+    .review {
+      height: 70px;
+      font-size: 20px;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 500;
+    }
+
+    .write-button {
+      border: none;
+      color: white;
+      padding: 8px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 20px;
+      margin-left: 6px;
+      cursor: pointer;
+      float: right;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 30px;
+    }
+  </style>
+</head>
+
+
+<body>
+  <div class="content">
+    <!-- 타이틀 -->
+    <header>
+      <div id="cafeteria">
+        <p>학생회관</p>
+    </header>
+    <!-- 구분선 -->
+    <hr class="hr">
+
+    <!-- 내용 -->
+    <section id="menu">
+      <div class="menu-description">
+        <!-- 메뉴 이미지 -->
+        <div class="menu-image">
+          <img width="700" height="500" src="./images/MenuDetail/test.jpg" alt="">
         </div>
-      </header>
-
-      <hr style="border: solid 1.5px #a0a0a0;">
-
-      <!-- 내용 -->
-      <section id = "menu">
-        <div class = "menu-description">
-          <div class = "menu-image">
-            <img src="./images/MenuDetail/test.jpg" alt="">
-          </div>
-          <div class = "text">
-              <p class="menu-name">소금 구이 덮밥</p>
-              <p>들기름에 달달볶은 진한 사골육수를 넣어 끓여낸 소시지 오물렛</p>
-              <div class="starRev">
-                <span class="starR1 on">별1_왼쪽</span>
-                <span class="starR2 on">별1_오른쪽</span>
-                <span class="starR1 on">별2_왼쪽</span>
-                <span class="starR2">별2_오른쪽</span>
-                <span class="starR1">별3_왼쪽</span>
-                <span class="starR2">별3_오른쪽</span>
-                <span class="starR1">별4_왼쪽</span>
-                <span class="starR2">별4_오른쪽</span>
-                <span class="starR1">별5_왼쪽</span>
-                <span class="starR2">별5_오른쪽</span>
-              </div>
-              <div class="starRate">
-                <span>3.0</span>
-              </div>
-              <br style="clear:both">
-              <hr style="margin-top : 20px">
-              <div class="reserve">
-                <div class="select-style">
-                  <select id="time">
-                    <option class="option" selected>시간 선택</option>
-                  </select>
-                </div>
-                <button class="button">예약 하기</button>
-              </div>
-          </div>
-        </div>
-        <br style="clear:both">
-        <hr style="border: solid 1px #a0a0a0;">
-      </section>
-
-      <section id = "write-review">
+        <!--메뉴 상세 부분 -->
+        <div class="text">
+          <!-- 메뉴 이름 -->
+          <p class="menu-name">소금 구이 덮밥</p>
+          <!-- 메뉴 짧은 설명 -->
+          <p class="menu-detail">들기름에 달달볶은 진한 사골육수를 넣어 끓여낸 소시지 오물렛</p>
+          <!-- 메뉴 별점 -->
           <div class="starRev">
             <span class="starR1 on">별1_왼쪽</span>
             <span class="starR2 on">별1_오른쪽</span>
@@ -389,38 +449,87 @@
             <span class="starR1">별5_왼쪽</span>
             <span class="starR2">별5_오른쪽</span>
           </div>
+          <!-- 별점 텍스트 -->
+          <div class="starRate">
+            <span>3.0</span>
+          </div>
+          <!-- 구분선 -->
           <br style="clear:both">
-          <form class="">
-            <input type="text" name="review" value="" placeholder="댓글을 작성해주세요">
-            <input type="submit" value="작성하기">
-          </form>
-
-      </section>
-
-      <hr style="border: solid 1.5px #a0a0a0;">
-
-      <section id="other-review">
-        <div class="nickname">
-          <span>다인이</span>
-        </div>
-        <div class="review-content">
-          <span>냥냥냥냥냥냥냥</span>
-        </div>
-        <div class="review-star"
-          <div class="starRev">
-            <span class="starR1">별1_왼쪽</span>
-            <span class="starR2">별1_오른쪽</span>
-            <span class="starR1">별2_왼쪽</span>
-            <span class="starR2">별2_오른쪽</span>
-            <span class="starR1">별3_왼쪽</span>
-            <span class="starR2">별3_오른쪽</span>
-            <span class="starR1">별4_왼쪽</span>
-            <span class="starR2">별4_오른쪽</span>
-            <span class="starR1">별5_왼쪽</span>
-            <span class="starR2">별5_오른쪽</span>
+          <hr class="hr2" style="margin-top : 40px">
+          <!-- 예약 부분 -->
+          <div class="reserve">
+            <!-- 메뉴 가격 -->
+            <br style="margin-top : 40px">
+            <p class="menu-price">4,200원</p>
+            <div style="margin-top: 40px">
+              <!-- 시간 선택 -->
+              <div class="select-style" style="width:210px; height:80px;">
+                <select id="time">
+                  <option class="option" selected>시간 선택</option>
+                </select>
+              </div>
+              <!-- 예약 버튼 -->
+              <button class="button" style="width:210px; height:92px;">예약 하기</button>
+            </div>
           </div>
         </div>
-      </section>
-    </div>
-  </body>
+      </div>
+      <!-- 구분선 -->
+      <br style="clear:both">
+      <hr class="hr2" style="margin-bottom : 40px">
+    </section>
+
+    <!-- 리뷰 부분 -->
+    <section id="write-review">
+      <!-- 나의 별점 -->
+      <div class="starRev">
+        <span class="starR1 on">별1_왼쪽</span>
+        <span class="starR2 on">별1_오른쪽</span>
+        <span class="starR1 on">별2_왼쪽</span>
+        <span class="starR2">별2_오른쪽</span>
+        <span class="starR1">별3_왼쪽</span>
+        <span class="starR2">별3_오른쪽</span>
+        <span class="starR1">별4_왼쪽</span>
+        <span class="starR2">별4_오른쪽</span>
+        <span class="starR1">별5_왼쪽</span>
+        <span class="starR2">별5_오른쪽</span>
+      </div>
+      <br style="clear:both">
+      <!-- 댓글 작성 부분 -->
+      <form class="" style="margin-top: 15px; margin-bottom: 40px;">
+        <!-- 댓글작성폼 -->
+        <input class="review" type="text" name="review" value="" placeholder="댓글을 작성해주세요">
+        <!-- 작성하기 버튼 -->
+        <input class="write-button" style="background: #548235" type="submit" value="작성하기">
+      </form>
+    </section>
+
+    <!-- 다른 사용자 리뷰 부분 -->
+    <section id="other-review">
+      <!-- 닉네임 -->
+      <div class="nickname">
+        <span>다인이</span>
+      </div>
+      <!-- 리뷰댓글 내용 -->
+      <div class="review-content">
+        <span>냥냥냥냥냥냥냥</span>
+      </div>
+      <!-- 리뷰 별점 -->
+      <div class="review-star" <div class="starRev">
+        <span class="starR1">별1_왼쪽</span>
+        <span class="starR2">별1_오른쪽</span>
+        <span class="starR1">별2_왼쪽</span>
+        <span class="starR2">별2_오른쪽</span>
+        <span class="starR1">별3_왼쪽</span>
+        <span class="starR2">별3_오른쪽</span>
+        <span class="starR1">별4_왼쪽</span>
+        <span class="starR2">별4_오른쪽</span>
+        <span class="starR1">별5_왼쪽</span>
+        <span class="starR2">별5_오른쪽</span>
+      </div>
+  </div>
+  </section>
+  </div>
+</body>
+
 </html>
