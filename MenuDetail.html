@@ -220,25 +220,6 @@
       display: inline-block;
     }
 
-    .button {
-      background-color: #4CAF50;
-      /* Green */
-      border: none;
-      color: white;
-      padding: 8px 32px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin-top: 20px;
-      margin-left: 6px;
-      cursor: pointer;
-      float: left;
-      height: 51px;
-      width: 171px;
-
-    }
-
     .select-style {
       border: 1px solid #ccc;
       height: 40px;
@@ -288,14 +269,41 @@
     }
 
     .text {
-      width: 48%;
-      float: left;
+      width: 450px;
+      float: right;
+    }
+
+    .menu-description {
+      padding-top: 50px;
+      height: 510px;
     }
 
     .menu-name {
-      font-size: 20px;
-      font-weight: normal;
+      font-family: "Noto Sans KR", sans-serif;
+      text-align: left;
+      font-weight: 500;
+      font-size: 35px;
+      margin-bottom: 20px;
+    }
+
+    .menu-detail {
+      font-family: "Noto Sans KR", sans-serif;
+      text-align: left;
+      font-weight: 300;
+      font-size: 30px;
       margin-bottom: 10px;
+      max-height: 100px;
+    }
+
+    .menu-price {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 300;
+      text-align: left;
+      font-size: 35px;
+      font-weight: normal;
+      margin-bottom: 5px;
+      margin-top: 15px;
+      margin-left: 10px;
     }
 
     .starRate {
@@ -328,6 +336,40 @@
       border: none;
       border: 1px solid black;
     }
+
+    .hr2 {
+      border: none;
+      border: 0.8px solid #A6A6A6;
+    }
+
+    #time {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 30px;
+    }
+
+    .button {
+      background-color: #385723;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 8px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 20px;
+      margin-left: 6px;
+      cursor: pointer;
+      float: left;
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 400;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 30px;
+    }
   </style>
 </head>
 
@@ -345,12 +387,17 @@
     <!-- 내용 -->
     <section id="menu">
       <div class="menu-description">
+        <!-- 메뉴 이미지 -->
         <div class="menu-image">
-          <img width="600" height="400" src="./images/MenuDetail/test.jpg" alt="">
+          <img width="700" height="500" src="./images/MenuDetail/test.jpg" alt="">
         </div>
+        <!--메뉴 상세 부분 -->
         <div class="text">
+          <!-- 메뉴 이름 -->
           <p class="menu-name">소금 구이 덮밥</p>
-          <p>들기름에 달달볶은 진한 사골육수를 넣어 끓여낸 소시지 오물렛</p>
+          <!-- 메뉴 짧은 설명 -->
+          <p class="menu-detail">들기름에 달달볶은 진한 사골육수를 넣어 끓여낸 소시지 오물렛</p>
+          <!-- 메뉴 별점 -->
           <div class="starRev">
             <span class="starR1 on">별1_왼쪽</span>
             <span class="starR2 on">별1_오른쪽</span>
@@ -363,26 +410,39 @@
             <span class="starR1">별5_왼쪽</span>
             <span class="starR2">별5_오른쪽</span>
           </div>
+          <!-- 별점 텍스트 -->
           <div class="starRate">
             <span>3.0</span>
           </div>
+          <!-- 구분선 -->
           <br style="clear:both">
-          <hr style="margin-top : 20px">
+          <hr class="hr2" style="margin-top : 40px">
+          <!-- 예약 부분 -->
           <div class="reserve">
-            <div class="select-style">
-              <select id="time">
-                <option class="option" selected>시간 선택</option>
-              </select>
+            <!-- 메뉴 가격 -->
+            <br style="margin-top : 40px">
+            <p class="menu-price">4,200원</p>
+            <div style="margin-top: 40px">
+              <!-- 시간 선택 -->
+              <div class="select-style" style="width:210px; height:80px;">
+                <select id="time">
+                  <option class="option" selected>시간 선택</option>
+                </select>
+              </div>
+              <!-- 예약 버튼 -->
+              <button class="button" style="width:210px; height:92px;">예약 하기</button>
             </div>
-            <button class="button">예약 하기</button>
           </div>
         </div>
       </div>
+      <!-- 구분선 -->
       <br style="clear:both">
-      <hr style="border: solid 1px #a0a0a0;">
+      <hr class="hr2" style="margin-bottom : 40px">
     </section>
 
+    <!-- 리뷰 부분 -->
     <section id="write-review">
+      <!-- 나의 별점 -->
       <div class="starRev">
         <span class="starR1 on">별1_왼쪽</span>
         <span class="starR2 on">별1_오른쪽</span>
@@ -396,22 +456,29 @@
         <span class="starR2">별5_오른쪽</span>
       </div>
       <br style="clear:both">
+      <!-- 댓글 작성 부분 -->
       <form class="">
+        <!-- 댓글작성폼 -->
         <input type="text" name="review" value="" placeholder="댓글을 작성해주세요">
+        <!-- 작성하기 버튼 -->
         <input type="submit" value="작성하기">
       </form>
-
     </section>
 
-    <hr style="border: solid 1.5px #a0a0a0;">
+    <!-- 구분선 -->
+    <hr class="hr2" style="margin-top: 40px; margin-bottom : 40px;">
 
+    <!-- 다른 사용자 리뷰 부분 -->
     <section id="other-review">
+      <!-- 닉네임 -->
       <div class="nickname">
         <span>다인이</span>
       </div>
+      <!-- 리뷰댓글 내용 -->
       <div class="review-content">
         <span>냥냥냥냥냥냥냥</span>
       </div>
+      <!-- 리뷰 별점 -->
       <div class="review-star" <div class="starRev">
         <span class="starR1">별1_왼쪽</span>
         <span class="starR2">별1_오른쪽</span>
