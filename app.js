@@ -49,9 +49,11 @@ app.post('/FoodMenu/data_load', (req,res) => {
 
 //Menu Detail
 app.post('/MenuDetail/menu_data_load', (req,res) => {
-  var cafeteria = '학생 회관';
-  var menu = '소금 구이 덮밥';
+  var cafeteria = req.body.cafeteria;
+  var menu = req.body.menu;
+
   var menu_data_sql = "select image,content FROM menu where cafeteria='"+ cafeteria +"' and name='"+ menu +"'";
+  console.log(menu_data_sql);
   con.query(menu_data_sql,function(err,result){
     if(err){
       throw err;
@@ -61,9 +63,11 @@ app.post('/MenuDetail/menu_data_load', (req,res) => {
 });
 
 app.post('/MenuDetail/reply_data_load', (req,res) => {
+
   var cafeteria = req.body.cafeteria;
   var menu = req.body.menu;
   var reply_data_sql = "select nickname,content,star FROM reply where cafeteria='"+ cafeteria +"' and menu='"+ menu +"'";
+  console.log(reply_data_sql);
   con.query(reply_data_sql,function(err,result){
     if(err){
       throw err;

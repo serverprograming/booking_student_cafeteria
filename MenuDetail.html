@@ -9,11 +9,10 @@
   <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
-      var cafeteria_id = decodeURI(location.href.substr(location.href.lastIndexOf('=') + 1));
-      var menu_id = decodeURI(location.href.substr(location.href.lastIndexOf('=') + 2));
-
-      var cafeteria = '학생 회관';
-      var menu = '소금 구이 덮밥';
+      var data1 = location.href.substr(location.href.lastIndexOf('?') + 1);
+      var data2 = data1.split("&");
+      var cafeteria = decodeURI(data2[0].substr(data2[0].lastIndexOf('=') + 1));
+      var menu = decodeURI(data2[1].substr(data2[1].lastIndexOf('=') + 1));
 
       //자릿수 채워주는 함수
       function pad(n, width) {
@@ -48,6 +47,13 @@
           var image = result[0]['image'];
           var content = result[0]['content'];
 
+          var menu_image = $('<div></div>').addClass('menu-image');
+          var image = $('  <img width="700" height="500" src="' + image +'" alt="">');
+          var menu_text = $('<div></div>').addClass('text');
+          var menu_name = $('<p>'+ menu +'</p>');
+          var menu_detail = $('<p>'+ content + '</p>');
+          var menu_starRate = $('<div></div>').addClass('starRate');
+          menu_image.append(image);
         });
       }
 
@@ -63,10 +69,36 @@
 
         $.post(url, jsonObject, function(result) {
           for (var i = 0; i < result.length; i++) {
+            console.log(i);
             var nickname = result[i]["nickname"];
             var content = result[i]["content"];
             var star = result[i]["star"];
-
+            console.log(nickname,content,star);
+            var reply_content = $('<div></div>').addClass('reply');
+            var review_nickname = $('<div></div>').addClass('nickname');
+            var nickname_span = $('<span>' + nickname +'</span>');
+            var review_content = $('<div></div>').addClass('review-content');
+            var content_span = $('<span>'+content+'</span>');
+            var review_star = $('<div></div>').addClass('review-star');
+            var star_rev = $('<div></div>').addClass('starRev');
+            review_nickname.append(nickname_span);
+            review_content.append(content_span);
+            for(var j=0 ; j < 10 ; j++){
+              var star_span;
+              if(j % 2 ==0) {
+                star_span = $('<span></span>').addClass('starR1');
+              }
+              else {
+                star_span = $('<span></span>').addClass('starR2');
+              }
+              if(j < star){
+                star_span.addClass('on');
+              }
+              star_rev.append(star_span);
+            }
+            review_star.append(star_rev);
+            $(reply_content).append(review_nickname).append(review_content).append(review_star);
+            $('#other-review').append(reply_content);
           }
         });
       }
@@ -419,6 +451,7 @@
     <header>
       <div id="cafeteria">
         <p>학생회관</p>
+      </div>
     </header>
     <!-- 구분선 -->
     <hr class="hr">
@@ -506,29 +539,7 @@
 
     <!-- 다른 사용자 리뷰 부분 -->
     <section id="other-review">
-      <!-- 닉네임 -->
-      <div class="nickname">
-        <span>다인이</span>
-      </div>
-      <!-- 리뷰댓글 내용 -->
-      <div class="review-content">
-        <span>냥냥냥냥냥냥냥</span>
-      </div>
-      <!-- 리뷰 별점 -->
-      <div class="review-star" <div class="starRev">
-        <span class="starR1">별1_왼쪽</span>
-        <span class="starR2">별1_오른쪽</span>
-        <span class="starR1">별2_왼쪽</span>
-        <span class="starR2">별2_오른쪽</span>
-        <span class="starR1">별3_왼쪽</span>
-        <span class="starR2">별3_오른쪽</span>
-        <span class="starR1">별4_왼쪽</span>
-        <span class="starR2">별4_오른쪽</span>
-        <span class="starR1">별5_왼쪽</span>
-        <span class="starR2">별5_오른쪽</span>
-      </div>
-  </div>
-  </section>
+    </section>
   </div>
 </body>
 
