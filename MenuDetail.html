@@ -52,15 +52,30 @@
 
         $.post(url, jsonObject, function(result) {
           console.log(result);
-          var image = result[0]['image'];
+          var image;
+          var content;
+          var price;
+          var total_star = 0;
+
+          for (var i = 0; i < result.length; i++){
+            var star_rate = parseInt(result[i]['star']);
+            image = result[0]['image'];
+            content = result[0]['content'];
+            price = result[0]['price'];
+            total_star += star_rate;
+          }
+          console.log(total_star/result.length);
+
+          for (var i = 1 ; i < total_star/result.length +1 ; i++){
+            $('.menu-description .starRev span:nth-child('+ i +')').addClass('on');
+          }
           image_src = image;
-          var content = result[0]['content'];
-          var price = result[0]['price'];
           menu_price = price;
           $(".menu-image img").attr("src", image);
           $('.menu-name').text(menu);
           $('.menu-detail').text(content);
           $('.menu-price').text(price+'원');
+          $('.starRate span').text(total_star/result.length);
         });
       }
 

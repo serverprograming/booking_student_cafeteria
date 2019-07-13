@@ -1,11 +1,1 @@
-CREATE TABLE reserve (
-    id INT AUTO_INCREMENT,
-    cafeteria VARCHAR(20) NOT NULL,
-    menu VARCHAR(20) NOT NULL,
-    time VARCHAR(100),
-    complete VARCHAR(20),
-    user_id VARCHAR(20),
-    price VARCHAR(20),
-    image_src VARCHAR(255),
-    PRIMARY KEY (id)
-);
+select m.price, m.image, m.content, r.star from menu as m inner join reply as r on m.cafeteria = r.cafeteria and m.name = r.menu where m.cafeteria ='학생회관' and m.name = '소금 구이 덮밥';

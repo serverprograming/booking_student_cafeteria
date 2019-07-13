@@ -53,8 +53,9 @@ app.post('/MenuDetail/menu_data_load', (req,res) => {
   var menu = req.body.menu;
 
   var menu_data_sql = "select image,content,price FROM menu where cafeteria='"+ cafeteria +"' and name='"+ menu +"'";
-  console.log(menu_data_sql);
-  con.query(menu_data_sql,function(err,result){
+  var menu_data_sql2 = "select m.price, m.image, m.content, r.star from menu as m left outer join reply as r on m.cafeteria = r.cafeteria and m.name = r.menu where m.cafeteria ='"+cafeteria+"' and m.name = '"+menu+"'";
+  console.log(menu_data_sql2);
+  con.query(menu_data_sql2,function(err,result){
     if(err){
       throw err;
     }
