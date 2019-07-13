@@ -34,6 +34,19 @@ app.get('/', function(req,res){
   res.redirect('main_login.html');
 });
 
+//Food MenuDetail
+app.post('/FoodMenu/data_load', (req,res) => {
+  var cafeteria = req.body.cafeteria;
+
+  var menu_data_sql = "select name,price,image FROM menu where cafeteria='"+ cafeteria + "'";
+  con.query(menu_data_sql,function(err,result){
+    if(err){
+      throw err;
+    }
+    res.send(result);
+  })
+});
+
 //Menu Detail
 app.post('/MenuDetail/menu_data_load', (req,res) => {
   var cafeteria = '학생 회관';
