@@ -30,6 +30,7 @@
       transform: translateY(100%);
       color: black;
       font-size: 2.5rem;
+      letter-spacing: 20px;
     }
 
     .hr {
@@ -102,22 +103,62 @@
     //페이지
     $(document).ready(function() {
 
-      // 인덱스 값에 따라 페이지 타이틀 다르게 설정
-      // 1: 학생회관, 2:군자키친, 3:진관키친
-      var cafeteria = location.href.substr(location.href.lastIndexOf('=') + 1);
-      var title;
-      switch (cafeteria) {
-        case '1':
-          title = '학　생　회　관';
-          break;
-        case '2':
-          title = '군　자　키　친';
-          break;
-        case '3':
-          title = '진　관　키　친';
-          break;
+      // 메뉴 데이터 로드 함수
+      function load_menu_data(cafeteria){
+
+        var jsonObject = {
+          cafeteria : cafeteria
+        };
+
+        var url = "http://localhost:8080/FoodMenu/data_load";
+
+        $.post(url, jsonObject, function(result){
+          //메뉴 로드
+          for(var i=0; i < result.length ; i++){
+            var menu_name = result[i]["name"];
+            var price = result[i]["price"];
+            var image = result[i]["image"];
+
+            var $main_section = $('#main-section').masonry({
+              itemSelector: '.menu',
+              columnWidth: 300,
+              isAnimated: true
+            });
+
+            var menu = $('<div></div>').addClass('menu');
+            var menu_image = $('<div></div>').addClass('menu-image');
+            var a_link = $('<a></a>');
+            var image = $('<img width="270" height="250" src="' + image + '" />');
+            var menu_name = $('<p>'+ menu_name +'</p>').addClass('menu-name');
+            var menu_price = $('<p>'+ price +'원</p>').addClass('menu-price');
+            var menu_star = $('<p>★★★☆☆　3.0</p>').addClass('menu-star');
+
+            a_link.append(image);
+            menu_image.append(a_link);
+            menu.append(menu_image).append(menu_name).append(menu_price).append(menu_star);
+
+            menu_image.click(function(){
+              var menu_name2 = menu_name.text();
+              window.location.href = "MenuDetail.html?index=" + cafeteria + "&index2=" + menu_name2;
+
+            })
+
+            menu_name.click(function(){
+              var menu_name2 = $(this).text();
+              window.location.href = "MenuDetail.html?index=" + cafeteria + "&index2=" + menu_name2;
+            })
+
+            $main_section.masonry().append(menu).masonry('appended', menu).masonry();
+          }
+        });
       }
-      $('header').html('<p>' + title + '</p>');
+
+      // 인덱스 값에 따라 페이지 타이틀 다르게 설정
+      var cafeteria = decodeURI(location.href.substr(location.href.lastIndexOf('=') + 1));
+
+      load_menu_data(cafeteria);
+
+      $('header').html('<p>' + cafeteria + '</p>');
 
       // masonry 라이브러리 적용
       $('#main-section').imagesLoaded(function() {
@@ -128,29 +169,31 @@
         });
       });
 
-      // 메뉴아이템 붙이기
-      var appendMenu = function() {
-        for (var i = 0; i < 20; i++) {
-          var $main_section = $('#main-section').masonry({
-            itemSelector: '.menu',
-            columnWidth: 300,
-            isAnimated: true
-          });
+      // // 메뉴아이템 붙이기
+      // var appendMenu = function() {
+      //   for (var i = 0; i < 20; i++) {
+      //     var $main_section = $('#main-section').masonry({
+      //       itemSelector: '.menu',
+      //       columnWidth: 300,
+      //       isAnimated: true
+      //     });
+      //
+      //     var menu = $('<div></div>').addClass('menu');
+      //     var menu_image = $('<div></div>').addClass('menu-image');
+      //     var a_link = $('<a></a>');
+      //     var image = $('<img width="270" height="250" src="images/food_menu_images/food.jpg" />');
+      //     var menu_name = $('<p>소금구이 덮밥</p>').addClass('menu-name');
+      //     var menu_price = $('<p>4,200원</p>').addClass('menu-price');
+      //     var menu_star = $('<p>★★★☆☆　3.0</p>').addClass('menu-star');
+      //
+      //     a_link.append(image);
+      //     menu_image.append(a_link);
+      //     menu.append(menu_image).append(menu_name).append(menu_price).append(menu_star);
+      //     $main_section.masonry().append(menu).masonry('appended', menu).masonry();
+      //   }
+      // };
 
-          var menu = $('<div></div>').addClass('menu');
-          var menu_image = $('<div></div>').addClass('menu-image');
-          var a_link = $('<a></a>');
-          var image = $('<img width="270" height="250" src="images/food_menu_images/food.jpg" />');
-          var menu_name = $('<p>소금구이 덮밥</p>').addClass('menu-name');
-          var menu_price = $('<p>4,200원</p>').addClass('menu-price');
-          var menu_star = $('<p>★★★☆☆　3.0</p>').addClass('menu-star');
 
-          a_link.append(image);
-          menu_image.append(a_link);
-          menu.append(menu_image).append(menu_name).append(menu_price).append(menu_star);
-          $main_section.masonry().append(menu).masonry('appended', menu).masonry();
-        }
-      };
 
       // 무한스크롤 메뉴 더 불러오기
       $(window).scroll(function() {
@@ -161,6 +204,9 @@
         }
       });
 
+      $('.menu').click(function(){
+        alert('냥냥');
+      });
     });
   </script>
 
@@ -179,7 +225,7 @@
     <!-- 메뉴들 -->
     <section id="main-section">
 
-      <div class="menu">
+      <!-- <div class="menu">
         <div class="menu-image">
           <a><img width="270" height="250" src="images/food_menu_images/food.jpg" /></a>
         </div>
@@ -246,7 +292,7 @@
         <p class="menu-name">소금구이 덮밥</p>
         <p class="menu-price">4,200원</p>
         <p class="menu-star">★★★☆☆　3.0</p>
-      </div>
+      </div> -->
     </section>
 
   </div>
