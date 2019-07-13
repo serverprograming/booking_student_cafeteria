@@ -20,10 +20,10 @@ var con = mysql.createConnection({
   insecureAuth : true
 });
 
-con.connect(function(err){
-  if (err) throw err;
-  console.log("Connected!");
-});
+// con.connect(function(err){
+//   if (err) throw err;
+//   console.log("Connected!");
+// });
 
 app.use(static(path.join(__dirname,'/')));
 app.use(express.json());
