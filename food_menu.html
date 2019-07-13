@@ -12,7 +12,7 @@
     }
 
     #container {
-      width: 1000px;
+      width: 800px;
       margin: 0 auto;
     }
   </style>
@@ -27,9 +27,9 @@
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 300;
       text-align: left;
-      transform: translateY(180%);
+      transform: translateY(200%);
       color: black;
-      font-size: 2.0rem;
+      font-size: 1.8rem;
       letter-spacing: 20px;
     }
 
@@ -41,12 +41,12 @@
   <!-- 메뉴 아이템 스타일  -->
   <style>
     #main-section {
-      width: 1000px;
+      width: 800px;
       margin: 0 auto;
     }
 
     .menu {
-      width: 250px;
+      width: 200px;
       margin-top: 40px;
       padding: 15px 10px 0;
       font-size: 11px;
@@ -120,14 +120,14 @@
 
             var $main_section = $('#main-section').masonry({
               itemSelector: '.menu',
-              columnWidth: 250,
+              columnWidth: 200,
               isAnimated: true
             });
 
             var menu = $('<div></div>').addClass('menu');
             var menu_image = $('<div></div>').addClass('menu-image');
             var a_link = $('<a></a>');
-            var image = $('<img width="250" height="200" src="' + image + '" />');
+            var image = $('<img width="180" height="130" src="' + image + '" />');
             var menu_name = $('<p>'+ menu_name +'</p>').addClass('menu-name');
             var menu_price = $('<p>'+ price +'원</p>').addClass('menu-price');
             var menu_star = $('<p>★★★☆☆　3.0</p>').addClass('menu-star');
@@ -163,7 +163,7 @@
       $('#main-section').imagesLoaded(function() {
         $('#main-section').masonry({
           itemSelector: '.menu',
-          columnWidth: 250,
+          columnWidth: 200,
           isAnimated: true
         });
       });
@@ -226,7 +226,7 @@
 
       <div class="menu">
         <div class="menu-image">
-          <a><img width="230" height="180" src="images/food_menu_images/food.jpg" /></a>
+          <a><img width="180" height="130" src="images/food_menu_images/food.jpg" /></a>
         </div>
         <p class="menu-name">소금구이 덮밥</p>
         <p class="menu-price">4,200원</p>
@@ -235,7 +235,7 @@
 
       <div class="menu">
         <div class="menu-image">
-          <a><img width="230" height="180" src="images/food_menu_images/food.jpg" /></a>
+          <a><img width="180" height="130" src="images/food_menu_images/food.jpg" /></a>
         </div>
         <p class="menu-name">소금구이 덮밥</p>
         <p class="menu-price">4,200원</p>
@@ -244,7 +244,7 @@
 
       <div class="menu">
         <div class="menu-image">
-          <a><img width="230" height="180" src="images/food_menu_images/food.jpg" /></a>
+          <a><img width="180" height="130" src="images/food_menu_images/food.jpg" /></a>
         </div>
         <p class="menu-name">소금구이 덮밥</p>
         <p class="menu-price">4,200원</p>
@@ -253,7 +253,7 @@
 
       <div class="menu">
         <div class="menu-image">
-          <a><img width="230" height="180" src="images/food_menu_images/food.jpg" /></a>
+          <a><img width="180" height="130" src="images/food_menu_images/food.jpg" /></a>
         </div>
         <p class="menu-name">소금구이 덮밥</p>
         <p class="menu-price">4,200원</p>
@@ -262,7 +262,7 @@
 
       <div class="menu">
         <div class="menu-image">
-          <a><img width="230" height="180" src="images/food_menu_images/food.jpg" /></a>
+          <a><img width="180" height="130" src="images/food_menu_images/food.jpg" /></a>
         </div>
         <p class="menu-name">소금구이 덮밥</p>
         <p class="menu-price">4,200원</p>
@@ -270,7 +270,7 @@
       </div>
       <div class="menu">
         <div class="menu-image">
-          <a><img width="230" height="180" src="images/food_menu_images/food.jpg" /></a>
+          <a><img width="180" height="130" src="images/food_menu_images/food.jpg" /></a>
         </div>
         <p class="menu-name">소금구이 덮밥</p>
         <p class="menu-price">4,200원</p>
@@ -278,7 +278,7 @@
       </div>
       <div class="menu">
         <div class="menu-image">
-          <a><img width="230" height="180" src="images/food_menu_images/food.jpg" /></a>
+          <a><img width="180" height="130" src="images/food_menu_images/food.jpg" /></a>
         </div>
         <p class="menu-name">소금구이 덮밥</p>
         <p class="menu-price">4,200원</p>
@@ -286,7 +286,7 @@
       </div>
       <div class="menu">
         <div class="menu-image">
-          <a><img width="230" height="180" src="images/food_menu_images/food.jpg" /></a>
+          <a><img width="180" height="130" src="images/food_menu_images/food.jpg" /></a>
         </div>
         <p class="menu-name">소금구이 덮밥</p>
         <p class="menu-price">4,200원</p>
