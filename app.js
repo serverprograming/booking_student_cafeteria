@@ -34,7 +34,6 @@ app.get('/', function(res,req){
   res.redirect('main.html');
 });
 
-
 //Menu Detail
 app.post('/MenuDetail/menu_data_load', (req,res) => {
   var cafeteria = '학생 회관';
@@ -62,7 +61,7 @@ app.post('/MenuDetail/reply_data_load', (req,res) => {
 
 app.post('/MenuDetail/write_reply', (req,res) => {
   var nickname = req.body.nickname;
-  var content = req.body.content;
+  var content = req.body.review;
   var star = req.body.star;
   var write_reply_sql = "INSERT INTO reply (id,cafeteria,menu,nickname,content,star) VALUES (NULL,'"+cafeteria+"','"+menu
   +"','"+nickname+"','"+content+"','"+star+"')";
