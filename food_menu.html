@@ -132,7 +132,6 @@
       color: #A6A6A6;
       margin-bottom: 20px;
     }
-
   </style>
   <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="jquery.masonry.min.js"></script>
@@ -157,6 +156,7 @@
             var price = result[i]["price"];
             var image = result[i]["image"];
             var star = result[i]["star"];
+
 
             var $main_section = $('#main-section').masonry({
               itemSelector: '.menu',
@@ -222,7 +222,6 @@
             menu_image.click(function() {
               var menu_name2 = menu_name.text();
               window.location.href = "MenuDetail.html?index=" + cafeteria + "&index2=" + menu_name2;
-
             })
 
             menu_name.click(function() {
@@ -251,10 +250,10 @@
         });
       });
 
-
       $('.menu').click(function() {
         alert('냥냥');
       });
+
     });
   </script>
 
