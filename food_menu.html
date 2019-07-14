@@ -4,6 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -17,17 +18,46 @@
     }
   </style>
 
+  <!-- 꼭대기 로그아웃,마이페이지 스타일 -->
+  <style>
+    .top {
+      margin: 10px;
+      padding-top: 10px;
+    }
+
+    #logout {
+      margin-top: 10px;
+      float: right;
+      font-family: "Roboto Condensed", sans-serif;
+      font-weight: 500;
+      color: black;
+      letter-spacing: 0px;
+      margin-right: 20px;
+      font-size: 15px;
+    }
+
+    #myreservation {
+      margin-top: 10px;
+      float: right;
+      font-family: "Roboto Condensed", sans-serif;
+      font-weight: 500;
+      color: black;
+      letter-spacing: 0px;
+      font-size: 15px;
+    }
+  </style>
+
   <!-- 헤더 타이틀 스타일 -->
   <style>
     header {
-      height: 200px;
+      height: 180px;
     }
 
     header p {
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 300;
       text-align: left;
-      transform: translateY(200%);
+      transform: translateY(180%);
       color: black;
       font-size: 1.8rem;
       letter-spacing: 20px;
@@ -103,17 +133,17 @@
     $(document).ready(function() {
 
       // 메뉴 데이터 로드 함수
-      function load_menu_data(cafeteria){
+      function load_menu_data(cafeteria) {
 
         var jsonObject = {
-          cafeteria : cafeteria
+          cafeteria: cafeteria
         };
 
         var url = "http://localhost:8080/FoodMenu/data_load";
 
-        $.post(url, jsonObject, function(result){
+        $.post(url, jsonObject, function(result) {
           //메뉴 로드
-          for(var i=0; i < result.length ; i++){
+          for (var i = 0; i < result.length; i++) {
             var menu_name = result[i]["name"];
             var price = result[i]["price"];
             var image = result[i]["image"];
@@ -128,21 +158,21 @@
             var menu_image = $('<div></div>').addClass('menu-image');
             var a_link = $('<a></a>');
             var image = $('<img width="180" height="130" src="' + image + '" />');
-            var menu_name = $('<p>'+ menu_name +'</p>').addClass('menu-name');
-            var menu_price = $('<p>'+ price +'원</p>').addClass('menu-price');
+            var menu_name = $('<p>' + menu_name + '</p>').addClass('menu-name');
+            var menu_price = $('<p>' + price + '원</p>').addClass('menu-price');
             var menu_star = $('<p>★★★☆☆　3.0</p>').addClass('menu-star');
 
             a_link.append(image);
             menu_image.append(a_link);
             menu.append(menu_image).append(menu_name).append(menu_price).append(menu_star);
 
-            menu_image.click(function(){
+            menu_image.click(function() {
               var menu_name2 = menu_name.text();
               window.location.href = "MenuDetail.html?index=" + cafeteria + "&index2=" + menu_name2;
 
             })
 
-            menu_name.click(function(){
+            menu_name.click(function() {
               var menu_name2 = $(this).text();
               window.location.href = "MenuDetail.html?index=" + cafeteria + "&index2=" + menu_name2;
             })
@@ -203,7 +233,7 @@
         }
       });
 
-      $('.menu').click(function(){
+      $('.menu').click(function() {
         alert('냥냥');
       });
     });
@@ -214,6 +244,10 @@
 
 <body>
   <div id="container">
+    <div class="top-header">
+      <a id="myreservation">MY RESERVATION</a>
+      <a id="logout">LOGOUT</a>
+    </div>
     <!-- 타이틀 -->
     <header>
       <p>군　자　관</p>
