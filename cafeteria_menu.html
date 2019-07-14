@@ -1,91 +1,102 @@
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean"
-  rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script>
-  $.post("/sessionchecker", function (data) {
-    if (!data) {
-      document.location.href = "/login.html";
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script>
+    $.post("/sessionchecker", function (data) {
+      if (!data) {
+        document.location.href = "/login.html";
+      }
+    });
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-  });
-</script>
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
 
-  html,
-  body {
-    height: 100%;
-    background: black;
-  }
+    html,
+    body {
+      background: #6A635A;
+      height: 100%
+    }
 
-  #container {
-    width: 1000px;
-    margin: 0 auto;
-  }
+    #container {
+      width: 1000px;
+      margin: 0 auto;
+      height: 100%;
+    }
 
-  menu {
-    clear: both;
-    height: 33.333%;
-  }
+    menu {
+      clear: both;
+      height: 33.333%;
+    }
 
-  menu p {
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 300;
-    text-align: center;
-    transform: translateY(200%);
-    color: white;
-    font-size: 2.5rem;
-  }
+    menu p {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 300;
+      text-align: center;
+      transform: translateY(250%);
+      color: white;
+      font-size: 2.0rem;
+      letter-spacing: 25px;
+    }
 
-  #menu1 {
-    background: url(images/cafeteria_menu_images/pic1.jpg) no-repeat center;
-    background-size: cover;
-  }
+    #menu1 {
+      background: url(images/cafeteria_menu_images/menu1.jpg) no-repeat center;
+      background-size: cover;
+    }
 
-  #menu1:hover {
-    background: url(images/cafeteria_menu_images/pic3.jpg) no-repeat center;
-    background-size: cover;
-  }
+    #menu1:hover {
+      opacity: 0.6;
+      color: black;
+    }
 
-  #menu2 {
-    background: url(images/cafeteria_menu_images/pic2.jpg) no-repeat center;
-    background-size: cover;
-  }
+    #menu2 {
+      background: url(images/cafeteria_menu_images/menu2.jpg) no-repeat center;
+      background-size: cover;
+    }
 
-  #menu2:hover {
-    background: url(images/cafeteria_menu_images/pic3.jpg) no-repeat center;
-    background-size: cover;
-  }
+    #menu2:hover {
+      opacity: 0.6;
+      color: black;
+    }
 
-  #menu3 {
-    background: url(images/cafeteria_menu_images/footer.jpg) no-repeat center;
-    background-size: cover;
-  }
+    #menu3 {
+      background: url(images/cafeteria_menu_images/menu4.jpg) no-repeat center;
+      background-size: cover;
+    }
 
-  #menu3:hover {
-    background: url(images/cafeteria_menu_images/pic3.jpg) no-repeat center;
-    background-size: cover;
-  }
-</style>
+    #menu3:hover {
+      opacity: 0.6;
+      color: black;
+    }
+  </style>
 
+  <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script>
+    function setValue(index) {
+      window.location.href = "food_menu.html?index=" + index;
+    }
+  </script>
+
+</head>
 
 <body>
   <div id="container">
-    <menu id="menu1">
-      <p>학　생　회　관</p>
+    <menu id="menu1" onclick="setValue('학생회관')">
+      <p>학생회관</p>
     </menu>
-    <menu id="menu2">
-      <p>군　자　관</p>
+    <menu id="menu2" onclick="setValue('군자키친')">
+      <p>군자키친</p>
     </menu>
-    <menu id="menu3">
-      <p>진　관　홀</p>
+    <menu id="menu3" onclick="setValue('진관키친')">
+      <p>진관키친</p>
     </menu>
   </div>
 </body>
 
-<script>
-
-</script>
+</html>

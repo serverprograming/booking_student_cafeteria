@@ -32,16 +32,26 @@ con.connect(function (err) {
   console.log("Connected!");
 });
 
-
 app.use(static(path.join(__dirname, '/')));
 app.use(express.json());
 
 app.set('port', process.env.PORT || 8080);
 
-app.set('port', process.env.PORT || 8080);
-
 app.get('/', function (req, res) {
   res.redirect('main_login.html');
+});
+
+//Food MenuDetail
+app.post('/FoodMenu/data_load', (req,res) => {
+  var cafeteria = req.body.cafeteria;
+
+  var menu_data_sql = "select name,price,image FROM menu where cafeteria='"+ cafeteria + "'";
+  con.query(menu_data_sql,function(err,result){
+    if(err){
+      throw err;
+    }
+    res.send(result);
+  })
 });
 
 //Menu Detail
@@ -103,7 +113,7 @@ app.post('/MenuDetail/reserve', (req, res) => {
   })
 });
 
-//
+// login and register
 app.post('/signup', (req, res) => {
   var id = req.body.id;
   var password = req.body.password;
@@ -122,41 +132,16 @@ app.post('/signup', (req, res) => {
   console.log(sql);
   console.log(id, password, nickname, phone, manager1, manager2);
 
-  //   var checksql = `select count(*) from member where id='${id}'`;
-  // var check = 0;
-
-  // con.query(checksql, function(err, result) {
-  //   if(err) {
-
-  //   }
-  //   else {
-  //     console.log(result);
-  //     check = result[0]['count(*)'];
-  //     console.log(check);
-
-  //     if(check > 0) {
-  //       res.send();
-  //       return;
-  //     }
-  //     else {
-  //       con.query();
-  //     }
-  //   }
-  // });
-
   con.query(sql, function (err, result) {
     if (err) {
       console.log(err);
       if (err.code = "ER_DUP_ENTRY") {
         res.send("<script>alert('아이디가 중복됩니다.'); document.location.href='/signup.html';</script>");
-        //res.send("dup_id");
       }
-      // throw err;
     }
     else {
       console.log("1 record inserted");
       res.send('<script>document.location.href="/login.html";</script>');
-      //res.send("ok");
     }
   });
 });
