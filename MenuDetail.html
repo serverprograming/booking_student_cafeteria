@@ -5,16 +5,17 @@
   <meta charset="utf-8">
   <title>Menu Detail</title>
   <!--Stylesheets-->
-	<link href="modal_css/jquery.modal.css" type="text/css" rel="stylesheet" />
-	<link href="modal_css/jquery.modal.theme-xenon.css" type="text/css" rel="stylesheet" />
-	<link href="modal_css/jquery.modal.theme-atlant.css" type="text/css" rel="stylesheet" />
+  <link href="modal_css/jquery.modal.css" type="text/css" rel="stylesheet" />
+  <link href="modal_css/jquery.modal.theme-xenon.css" type="text/css" rel="stylesheet" />
+  <link href="modal_css/jquery.modal.theme-atlant.css" type="text/css" rel="stylesheet" />
 
   <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script type="text/javascript" src="modal_js/jquery.modal.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
+  
   <script>
-    $.post("/sessionchecker", function (data) {
+    $.post("/sessionchecker", function(data) {
       if (!data) {
         document.location.href = "/login.html";
       }
@@ -32,7 +33,7 @@
       var global_user_id;
       var user_nickname;
 
-      function load_user_data(){
+      function load_user_data() {
         var url = "http://localhost:8080/MenuDetail/user_data_load";
         $.get(url, function(result) {
           global_user_id = result[0]['id'];
@@ -52,7 +53,7 @@
         for (var hour = 9; hour < 20; hour++) {
           var minute = 0;
           for (var i = 0; i < 6; i++) {
-            var option = $('<option>' + pad(hour,2) + ' : ' + pad(minute, 2) + '</option>');
+            var option = $('<option>' + pad(hour, 2) + ' : ' + pad(minute, 2) + '</option>');
             minute += 10;
             $('#time').append(option);
           }
@@ -75,7 +76,7 @@
           var price;
           var total_star = 0;
 
-          for (var i = 0; i < result.length; i++){
+          for (var i = 0; i < result.length; i++) {
             var star_rate = parseInt(result[i]['star']);
             image = result[0]['image'];
             content = result[0]['content'];
@@ -83,16 +84,16 @@
             total_star += star_rate;
           }
 
-          for (var i = 1 ; i < total_star/result.length +1 ; i++){
-            $('.menu-description .starRev span:nth-child('+ i +')').addClass('on');
+          for (var i = 1; i < total_star / result.length + 1; i++) {
+            $('.menu-description .starRev span:nth-child(' + i + ')').addClass('on');
           }
           image_src = image;
           menu_price = price;
           $(".menu-image img").attr("src", image);
           $('.menu-name').text(menu);
           $('.menu-detail').text(content);
-          $('.menu-price').text(price+'원');
-          $('.starRate span').text((total_star/result.length).toFixed(1));
+          $('.menu-price').text(price + '원');
+          $('.starRate span').text((total_star / result.length).toFixed(1));
         });
       }
 
@@ -106,29 +107,28 @@
 
         var url = "http://localhost:8080/MenuDetail/reply_data_load";
 
-        $.post(url, jsonObject, function (result) {
+        $.post(url, jsonObject, function(result) {
           for (var i = 0; i < result.length; i++) {
             var nickname = result[i]["nickname"];
             var content = result[i]["content"];
             var star = result[i]["star"];
             var reply_content = $('<div></div>').addClass('reply');
             var review_nickname = $('<div></div>').addClass('nickname');
-            var nickname_span = $('<span>' + nickname +'</span>');
+            var nickname_span = $('<span>' + nickname + '</span>');
             var review_content = $('<div></div>').addClass('review-content');
-            var content_span = $('<span>'+content+'</span>');
+            var content_span = $('<span>' + content + '</span>');
             var review_star = $('<div></div>').addClass('review-star');
             var star_rev = $('<div></div>').addClass('starRev');
             review_nickname.append(nickname_span);
             review_content.append(content_span);
-            for(var j=0 ; j < 10 ; j++){
+            for (var j = 0; j < 10; j++) {
               var star_span;
-              if(j % 2 ==0) {
+              if (j % 2 == 0) {
                 star_span = $('<span></span>').addClass('starR1');
-              }
-              else {
+              } else {
                 star_span = $('<span></span>').addClass('starR2');
               }
-              if(j < star){
+              if (j < star) {
                 star_span.addClass('on');
               }
               star_rev.append(star_span);
@@ -146,17 +146,16 @@
 
       loadTimeSelect();
 
-      $('.button').click(function () {
+      $('.button').click(function() {
         var current_selectedTime = $('#time option:selected').text();
 
         if (current_selectedTime == "시간 선택") {
           modal({
-    				type: 'alert',
-    				title: '알림',
-    				text: "시간을 설정해주세요"
-    			});
-        }
-        else {
+            type: 'alert',
+            title: '알림',
+            text: "시간을 설정해주세요"
+          });
+        } else {
           var devide_time = current_selectedTime.split(":");
           var hour = devide_time[0].trim();
           var minute = devide_time[1].trim();
@@ -164,29 +163,36 @@
           modal({
             type: 'confirm',
             title: '예약 확인',
-            text: hour +'시 '+ minute + '분에 예약을 진행하시겠습니까?',
+            text: hour + '시 ' + minute + '분에 예약을 진행하시겠습니까?',
             callback: function(result) {
-              if(result){
+              if (result) {
                 var newDate = new Date();
                 var day;
                 switch (newDate.getDay()) {
-                  case 0: day = '일'
+                  case 0:
+                    day = '일'
                     break;
-                  case 1: day = '월'
+                  case 1:
+                    day = '월'
                     break;
-                  case 2: day = '화'
+                  case 2:
+                    day = '화'
                     break;
-                  case 3: day = '수'
+                  case 3:
+                    day = '수'
                     break;
-                  case 4: day = '목'
+                  case 4:
+                    day = '목'
                     break;
-                  case 5: day = '금'
+                  case 5:
+                    day = '금'
                     break;
-                  case 6: day = '토'
+                  case 6:
+                    day = '토'
                     break;
                   default:
                 }
-                var time = newDate.getFullYear() +'-' + pad((newDate.getMonth()+1),2)+'-'+ pad(newDate.getDate(),2)+' ('+day+') '+ pad(hour,2)+'시 ' +pad(minute,2) +'분';
+                var time = newDate.getFullYear() + '-' + pad((newDate.getMonth() + 1), 2) + '-' + pad(newDate.getDate(), 2) + ' (' + day + ') ' + pad(hour, 2) + '시 ' + pad(minute, 2) + '분';
 
                 var user_id = global_user_id;
                 var complete = '0';
@@ -197,7 +203,7 @@
                   time: time,
                   user_id: user_id,
                   image_src: image_src,
-                  menu_price : menu_price,
+                  menu_price: menu_price,
                   complete: '0'
                 };
 
@@ -212,12 +218,12 @@
                     text: result
                   });
                 });
-              } else{
+              } else {
                 modal({
-          				type: 'alert',
-          				title: '알림',
-          				text: "예약을 취소하였습니다"
-          			});
+                  type: 'alert',
+                  title: '알림',
+                  text: "예약을 취소하였습니다"
+                });
               }
             }
           });
@@ -236,8 +242,8 @@
           type: 'confirm',
           title: '댓글 작성',
           text: '댓글을 작성하시겠습니까?',
-          callback : function(result){
-            if(result){
+          callback: function(result) {
+            if (result) {
               var content = $('.review').val();
               var star = ($('#write-review .starRev .on').length).toFixed(1);
               var nickname = user_nickname;
@@ -246,33 +252,67 @@
                 menu: menu,
                 nickname: nickname,
                 content: content,
-                star : star
+                star: star
               };
 
               var url = "http://localhost:8080/MenuDetail/write_reply";
 
               $.post(url, jsonObject, function(result) {
-                  load_reply_data(cafeteria, menu);
+                load_reply_data(cafeteria, menu);
               });
 
-            } else{
-                modal({
-                  type: 'alert',
-                  title: '알림',
-                  text: "댓글 작성을 취소하였습니다."
-                });
+            } else {
+              modal({
+                type: 'alert',
+                title: '알림',
+                text: "댓글 작성을 취소하였습니다."
+              });
             }
           }
         });
       });
     });
   </script>
+
+    <!-- 탑 헤더 로그아웃,마이페이지 스타일 -->
   <style>
     * {
       margin: 0;
       padding: 0;
     }
 
+    .top {
+      height: 60px;
+      width: 100%;
+      background-color: #BE9B5F;
+    }
+
+    .topContent {
+      width: 800px;
+      margin: auto;
+      padding-top: 5px;
+      color: white;
+      display: flex;
+    }
+
+    .topleft {
+      width: 200px;
+      margin: 0;
+    }
+
+    .topright {
+      width: 400px;
+      margin-left: 57%;
+      margin-top: 15px;
+      float: right;
+      font-family: "Roboto Condensed", sans-serif;
+      font-weight: 600;
+      color: white;
+      font-size: 18px;
+    }
+  </style>
+
+  <style>
     /* 별점  */
     .starR1 {
       background: url('images/MenuDetail/star.png') no-repeat -52px 0;
@@ -517,7 +557,7 @@
     }
 
     .button {
-      background-color: #385723;
+      background-color: #7E6438;
       /* Green */
       border: none;
       color: white;
@@ -565,8 +605,23 @@
 </head>
 
 
-
 <body>
+  <!-- 상단바 -->
+  <div class="top">
+    <div class="topContent">
+      <div class="topleft">
+        <a>
+          <h1>Booking</h1>
+        </a>
+      </div>
+      <div class="topright">
+        <a id="reservationbtn" href="/reservation.html" style="text-decoration:none; color:white;">MY RESERVATION　</a>
+        <a id="logoutbtn" href="/logout" style="text-decoration:none; color:white;">LOGOUT</a>
+      </div>
+    </div>
+  </div>
+
+
   <div class="content">
     <!-- 타이틀 -->
     <header>
@@ -654,7 +709,7 @@
       <!-- 댓글 작성 부분 -->
       <input class="review" type="text" name="review" value="" placeholder="댓글을 작성해주세요">
       <!-- 작성하기 버튼 -->
-      <input class="write-button" style="background: #548235" type="submit" value="작성하기">
+      <input class="write-button" style="background: #BE9B5F" type="submit" value="작성하기">
 
     </section>
 
@@ -668,12 +723,12 @@
 
 <script>
   //예약 확인 버튼 클릭 했을 때
-  $('').click(function () {
+  $('').click(function() {
     document.location.href = "/reservation.html";
   });
 
   //로그아웃 버튼 클릭 했을 때
-  $('').click(function () {
+  $('').click(function() {
     document.location.href = "/logout";
   });
 </script>

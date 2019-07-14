@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean"
+    rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script>
-    $.post("/sessionchecker", function (data) {
+    $.post("/sessionchecker", function(data) {
       if (!data) {
         document.location.href = "/login.html";
       }
@@ -39,10 +41,20 @@
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 300;
       text-align: center;
-      transform: translateY(200%);
+      transform: translateY(150%);
       color: white;
       font-size: 2.0rem;
       letter-spacing: 25px;
+    }
+
+    .detail {
+      font-family: "Noto Sans KR", sans-serif;
+      font-weight: 300;
+      text-align: center;
+      transform: translateY(340%);
+      color: #E4E4E4;
+      font-size: 15px;
+      letter-spacing: 8px;
     }
 
     #menu1 {
@@ -78,8 +90,22 @@
 
   <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script>
+    $(document).ready(function(){
+
+    });
+
     function setValue(index) {
-      window.location.href = "food_menu.html?index=" + index;
+      $.post('/cafeteria_menu', function (data) {
+        var manager = data[0]['manager'];
+        console.log(manager);
+
+        if (manager == 0) {
+          window.location.href = "food_menu.html?index=" + index;
+        }
+        else {
+          window.location.href = "reservation_manager.html?index=" + index;
+        }
+      });
     }
   </script>
 
@@ -88,12 +114,15 @@
 <body>
   <div id="container">
     <menu id="menu1" onclick="setValue('학생회관')">
+      <p class="detail">한식·일식·중식·양식</p>
       <p>학생회관</p>
     </menu>
     <menu id="menu2" onclick="setValue('군자키친')">
+      <p class="detail">한식·양식</p>
       <p>군자키친</p>
     </menu>
     <menu id="menu3" onclick="setValue('진관키친')">
+      <p class="detail">한식·양식</p>
       <p>진관키친</p>
     </menu>
   </div>
