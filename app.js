@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 app.use(session({
   secret: 'cjfwls1226',
-  resave:false,
+  resave: false,
   saveUninitialized: true
 }));
 
@@ -42,7 +42,7 @@ app.get('/', function (req, res) {
 });
 
 //Food MenuDetail
-app.post('/FoodMenu/data_load', (req,res) => {
+app.post('/FoodMenu/data_load', (req, res) => {
   var cafeteria = req.body.cafeteria;
 
   var menu_data_sql = "select name,price,image,star FROM menu where cafeteria='"+ cafeteria + "'";
@@ -128,7 +128,7 @@ app.post('/MenuDetail/write_reply', (req,res) => {
         throw err;
       }
       console.log(result);
-    }
+    });
     res.send(result);
   })
 });
@@ -197,39 +197,100 @@ app.post('/login', (req, res) => {
     if (err) {
       throw err;
     }
-    else{
+    else {
       check = result[0]['count(*)'];
 
-      if(check == 1)
-      {
-        if(!req.session.userid) {
-          req.session.userid=id;
+      if (check == 1) {
+        if (!req.session.userid) {
+          req.session.userid = id;
         }
         res.send('<script>document.location.href="/cafeteria_menu.html";</script>');
       }
-      else
-      {
+      else {
         res.send('<script>alert("아이디와 비밀번호를 확인하세요."); document.location.href="/login.html";</script>');
       }
     }
   });
 });
 
-app.post('/sessionchecker', function(req, res) {
-  if(!req.session.userid) {
+app.post('/sessionchecker', function (req, res) {
+  if (!req.session.userid) {
     res.send(false);
   }
-  else{
+  else {
     res.send(true);
   }
 });
 
-app.get('/logout', function(req, res) {
-  if(req.session.userid)
-  {
+app.get('/logout', function (req, res) {
+  if (req.session.userid) {
     delete req.session.userid;
   }
   res.send("<script>document.location.href='/login.html';</script>");
+});
+
+app.post('/reservation', function (req, res) {
+  // var id = req.body.id;
+  // var cafeteria = req.body.cafeteria;
+  // var menu = req.body.menu;
+  // var time = req.body.time;
+  // var complete = req.body.complete;
+  // var user_id = req.body.user_id;
+  // var price = req.body.price;
+  // var image_src = req.body.image_src;
+
+  var sql = "select * from reserve where user_id='" + req.session.userid + "'";
+
+  con.query(sql, function (err, result, fields) {
+    if (err) {
+      throw err;
+    }
+    res.send(result);
+  });
+});
+
+app.post('/cafeteria_menu', function (req, res) {
+  var sql = "select manager from member where id='" + req.session.userid + "'";
+
+  con.query(sql, function (err, result, fields) {
+    if (err) {
+      throw err;
+    }
+    res.send(result);
+  });
+});
+
+app.post('/reservation_manager_hak', function(req, res) {
+  var sql = "select * from reserve where cafeteria='학생회관'";
+
+  con.query(sql, function(err, result, fields) {
+    if(err) {
+      throw err;
+    }
+    res.send(result);
+  })
+});
+
+app.post('/reservation_manager_gun', function(req, res) {
+  var sql = "select * from reserve where cafeteria='군자키친'";
+
+  con.query(sql, function(err, result, fields) {
+    if(err) {
+      throw err;
+    }
+    res.send(result);
+  })
+});
+
+app.post('/reservation_manager_jin', function(req, res) {
+  var sql = "select * from reserve where cafeteria='진관키친'";
+
+  con.query(sql, function(err, result, fields) {
+    if(err) {
+      throw err;
+    }
+    res.send(result);
+  })
 });
 
 http.createServer(app).listen(app.get('port'), function () {

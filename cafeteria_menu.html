@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean"
+    rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script>
     $.post("/sessionchecker", function (data) {
@@ -78,8 +80,22 @@
 
   <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script>
+    $(document).ready(function(){
+
+    });
+
     function setValue(index) {
-      window.location.href = "food_menu.html?index=" + index;
+      $.post('/cafeteria_menu', function (data) {
+        var manager = data[0]['manager'];
+        console.log(manager);
+
+        if (manager == 0) {
+          window.location.href = "food_menu.html?index=" + index;
+        }
+        else {
+          window.location.href = "reservation_manager.html?index=" + index;
+        }
+      });
     }
   </script>
 

@@ -11,6 +11,141 @@
                 document.location.href = "/login.html";
             }
         });
+
+        $(document).ready(function () {
+            var falsehtml = "";
+            var html = "";
+            $.post("/reservation", function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    console.log(data[i]['id']);
+                    var id = data[i]['id'];
+                    var cafeteria = data[i]['cafeteria'];
+                    var menu = data[i]['menu'];
+                    var time = data[i]['time'];
+                    var complete = data[i]['complete'];
+                    var user_id = data[i]['user_id'];
+                    var price = data[i]['price'];
+                    var image_src = data[i]['image_src'];
+
+                    var today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth() + 1;
+                    var yyyy = today.getFullYear();
+                    var hour = today.getHours();
+                    var day = today.getDay();
+                    var min = today.getMinutes();
+                    var plus = $('#plus');
+                    var plusFalseCard = $('#plusFalseCard');
+
+                    if (day == 0) {
+                        day = '일';
+                    }
+                    else if (day == 1) {
+                        day = '월';
+                    }
+                    else if (day == 2) {
+                        day = '화';
+                    }
+                    else if (day == 3) {
+                        day = '수';
+                    }
+                    else if (day == 4) {
+                        day = '목';
+                    }
+                    else if (day == 5) {
+                        day = '금';
+                    }
+                    else if (day == 6) {
+                        day = '토';
+                    }
+
+                    function pad(n, width) {
+                        n = n + '';
+                        return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+                    }
+
+                    var current = true;
+                    if (time >= `${yyyy}-${pad(mm, 2)}-${pad(dd, 2)} (${day}) ${pad(hour, 2)}시 ${pad(min, 2)}분`) {
+                        current = false;
+                    }
+                    console.log(current);
+                    if (!current) {
+                        html += `
+        <div class="reservationCard shadow">
+                <div class="cardLeft">
+                    <div class="reservationDate">
+                        <p>${time}</p>
+                    </div>
+                    <div class="reservationMenu">
+                        <div class="menuImage">
+                            <img class="mImage" src="${image_src}">
+                        </div>
+                        <div class="menuInformation">
+                            <div class="menuName">
+                                <p>${menu}</p>
+                            </div>
+                            <div class="cafeteriaName">
+                                <p>${cafeteria}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cardRight">
+                    <div class="menuCost">
+                        <h3>￦${price}</h3>
+                    </div>
+                    <div class="reservationNumber">
+                        <p>주문번호 : ${id}</p>
+                    </div>
+                </div>
+            </div>`
+                    }
+                    else {
+                        falsehtml += `
+        <div class="reservationCard grey">
+                <div class="cardLeft">
+                    <div class="reservationDate">
+                        <p>${time}</p>
+                    </div>
+                    <div class="reservationMenu">
+                        <div class="menuImage greyImage">
+                            <img class="mImage" src="${image_src}">
+                        </div>
+                        <div class="menuInformation">
+                            <div class="menuName">
+                                <p>${menu}</p>
+                            </div>
+                            <div class="cafeteriaName">
+                                <p>${cafeteria}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cardRight">
+                    <div class="menuCost">
+                        <h3>￦${price}</h3>
+                    </div>
+                    <div class="reservationNumber">
+                        <p>주문번호 : ${id}</p>
+                    </div>
+                </div>
+            </div>`
+                    }
+
+                }
+
+                console.log(html);
+                console.log(falsehtml);
+
+                plusFalseCard.append(falsehtml);
+                plus.append(html);
+
+
+            });
+        });
+
+
+
     </script>
     <style>
         * {
@@ -21,7 +156,7 @@
         .top {
             height: 60px;
             width: 100%;
-            background-color: #385723;
+            background-color: rgba(184, 145, 77, 0.8);
         }
 
         .topContent {
@@ -55,9 +190,13 @@
             margin-left: 10px;
             border: 2px solid white;
             border-radius: 4px;
-            background-color: #385723;
+            background-color: rgba(184, 145, 77, 0.8);
             color: white;
             cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: rgba(184, 145, 77, 1.0);
         }
 
         .reservationContent {
@@ -168,41 +307,17 @@
     </div>
 
     <div class="bodyContent">
-        <div class="reservationContent" id="plus">
+        <div class="reservationContent">
             <div>
                 <h2>예약</h2>
             </div>
             <div>
                 <p>현재 예약 내역</p>
             </div>
-            <div class="reservationCard shadow">
-                <div class="cardLeft">
-                    <div class="reservationDate">
-                        <p>2019-07-11 (목)</p>
-                    </div>
-                    <div class="reservationMenu">
-                        <div class="menuImage">
-                            <img class="mImage" src="f1.jpg">
-                        </div>
-                        <div class="menuInformation">
-                            <div class="menuName">
-                                <p>소금구이덮밥</p>
-                            </div>
-                            <div class="cafeteriaName">
-                                <p>학생회관</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardRight">
-                    <div class="menuCost">
-                        <h3>￦3,500</h3>
-                    </div>
-                    <div class="reservationNumber">
-                        <p>주문번호 : 126</p>
-                    </div>
-                </div>
+            <div id="plus">
+
             </div>
+
 
             <div class="expired" id="plusFalseCard">
                 <p>지난 예약 내역</p>
@@ -211,7 +326,7 @@
     </div>
 </body>
 
-<script>
+<!-- <script>
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1;
@@ -223,7 +338,7 @@
         n = n + '';
         return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
     }
-var falsehtml = "";
+    var falsehtml = "";
     var html = "";
 
     var dates = ['2019-07-07', '2019-07-05', '2019-07-01'];
@@ -234,8 +349,7 @@ var falsehtml = "";
             current = false;
         }
 
-        if(!current)
-        {
+        if (!current) {
             html += `
         <div class="reservationCard">
                 <div class="cardLeft">
@@ -266,7 +380,7 @@ var falsehtml = "";
                 </div>
             </div>`
         }
-            falsehtml += `
+        falsehtml += `
         <div class="reservationCard grey">
                 <div class="cardLeft">
                     <div class="reservationDate">
@@ -295,11 +409,11 @@ var falsehtml = "";
                     </div>
                 </div>
             </div>`
-        
+
     }
     plusFalseCard.append(falsehtml);
     plus.append(html);
-</script>
+</script> -->
 <script>
     //예약 확인 버튼 클릭 했을 때
     $('#reservationbtn').click(function () {
