@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script>
+    $.post("/sessionchecker", function (data) {
+      if (!data) {
+        document.location.href = "/login.html";
+      }
+    });
+  </script>
   <style>
     * {
       margin: 0;

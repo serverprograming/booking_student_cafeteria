@@ -5,5 +5,7 @@ CREATE TABLE reserve (
     time VARCHAR(20),
     complete VARCHAR(20),
 	user_id VARCHAR(20),
+    price VARCHAR(20),
+    image_src VARCHAR(20),
     PRIMARY KEY (id)
 );
