@@ -4,24 +4,41 @@
 <head>
   <meta charset="utf-8">
   <title>Menu Detail</title>
-  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
-  <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <!--Stylesheets-->
+	<link href="modal_css/jquery.modal.css" type="text/css" rel="stylesheet" />
+	<link href="modal_css/jquery.modal.theme-xenon.css" type="text/css" rel="stylesheet" />
+	<link href="modal_css/jquery.modal.theme-atlant.css" type="text/css" rel="stylesheet" />
 
-<script>
+  <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="modal_js/jquery.modal.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500&display=swap&subset=korean" rel="stylesheet">
+
+  <script>
     $.post("/sessionchecker", function (data) {
       if (!data) {
         document.location.href = "/login.html";
       }
     });
   </script>
-  
+
   <script type="text/javascript">
     $(document).ready(function() {
-      var cafeteria_id = decodeURI(location.href.substr(location.href.lastIndexOf('=') + 1));
-      var menu_id = decodeURI(location.href.substr(location.href.lastIndexOf('=') + 2));
+      var data1 = location.href.substr(location.href.lastIndexOf('?') + 1);
+      var data2 = data1.split("&");
+      var cafeteria = decodeURI(data2[0].substr(data2[0].lastIndexOf('=') + 1));
+      var menu = decodeURI(data2[1].substr(data2[1].lastIndexOf('=') + 1));
+      var image_src;
+      var menu_price;
+      var global_user_id;
+      var user_nickname;
 
-      var cafeteria = '학생 회관';
-      var menu = '소금 구이 덮밥';
+      function load_user_data(){
+        var url = "http://localhost:8080/MenuDetail/user_data_load";
+        $.get(url, function(result) {
+          global_user_id = result[0]['id'];
+          user_nickname = result[0]['nickname'];
+        });
+      }
 
       //자릿수 채워주는 함수
       function pad(n, width) {
@@ -35,7 +52,7 @@
         for (var hour = 9; hour < 20; hour++) {
           var minute = 0;
           for (var i = 0; i < 6; i++) {
-            var option = $('<option>' + hour + ' : ' + pad(minute, 2) + '</option>');
+            var option = $('<option>' + pad(hour,2) + ' : ' + pad(minute, 2) + '</option>');
             minute += 10;
             $('#time').append(option);
           }
@@ -52,15 +69,36 @@
 
         var url = "http://localhost:8080/MenuDetail/menu_data_load";
 
-        $.post(url, jsonObject, function (result) {
-          var image = result[0]['image'];
-          var content = result[0]['content'];
+        $.post(url, jsonObject, function(result) {
+          var image;
+          var content;
+          var price;
+          var total_star = 0;
+
+          for (var i = 0; i < result.length; i++){
+            var star_rate = parseInt(result[i]['star']);
+            image = result[0]['image'];
+            content = result[0]['content'];
+            price = result[0]['price'];
+            total_star += star_rate;
+          }
+
+          for (var i = 1 ; i < total_star/result.length +1 ; i++){
+            $('.menu-description .starRev span:nth-child('+ i +')').addClass('on');
+          }
+          image_src = image;
+          menu_price = price;
+          $(".menu-image img").attr("src", image);
+          $('.menu-name').text(menu);
+          $('.menu-detail').text(content);
+          $('.menu-price').text(price+'원');
+          $('.starRate span').text((total_star/result.length).toFixed(1));
         });
       }
 
       // 사용자 댓글 데이터 로드
       function load_reply_data(cafeteria, menu) {
-
+        $('#other-review').empty();
         var jsonObject = {
           cafeteria: cafeteria,
           menu: menu
@@ -73,11 +111,36 @@
             var nickname = result[i]["nickname"];
             var content = result[i]["content"];
             var star = result[i]["star"];
-
+            var reply_content = $('<div></div>').addClass('reply');
+            var review_nickname = $('<div></div>').addClass('nickname');
+            var nickname_span = $('<span>' + nickname +'</span>');
+            var review_content = $('<div></div>').addClass('review-content');
+            var content_span = $('<span>'+content+'</span>');
+            var review_star = $('<div></div>').addClass('review-star');
+            var star_rev = $('<div></div>').addClass('starRev');
+            review_nickname.append(nickname_span);
+            review_content.append(content_span);
+            for(var j=0 ; j < 10 ; j++){
+              var star_span;
+              if(j % 2 ==0) {
+                star_span = $('<span></span>').addClass('starR1');
+              }
+              else {
+                star_span = $('<span></span>').addClass('starR2');
+              }
+              if(j < star){
+                star_span.addClass('on');
+              }
+              star_rev.append(star_span);
+            }
+            review_star.append(star_rev);
+            $(reply_content).append(review_nickname).append(review_content).append(review_star);
+            $('#other-review').append(reply_content);
           }
         });
       }
 
+      load_user_data();
       load_menu_data(cafeteria, menu);
       load_reply_data(cafeteria, menu);
 
@@ -85,46 +148,123 @@
 
       $('.button').click(function () {
         var current_selectedTime = $('#time option:selected').text();
+
         if (current_selectedTime == "시간 선택") {
-          alert("시간을 설정해주세요");
+          modal({
+    				type: 'alert',
+    				title: '알림',
+    				text: "시간을 설정해주세요"
+    			});
         }
         else {
-          var result = confirm(current_selectedTime + ' 시간에 예약하시겠습니까?');
-          if (result) {
-            var cafeteria = '학생 회관';
-            var menu = '소금 구이 덮밥';
-            var time = current_selectedTime;
-            var user_id = 'seyoung1219';
-            var complete = '0';
+          var devide_time = current_selectedTime.split(":");
+          var hour = devide_time[0].trim();
+          var minute = devide_time[1].trim();
 
-            var jsonObject = {
-              cafeteria: cafeteria,
-              menu: menu,
-              time: time,
-              user_id: user_id,
-              complete: '0'
-            };
+          modal({
+            type: 'confirm',
+            title: '예약 확인',
+            text: hour +'시 '+ minute + '분에 예약을 진행하시겠습니까?',
+            callback: function(result) {
+              if(result){
+                var newDate = new Date();
+                var day;
+                switch (newDate.getDay()) {
+                  case 0: day = '일'
+                    break;
+                  case 1: day = '월'
+                    break;
+                  case 2: day = '화'
+                    break;
+                  case 3: day = '수'
+                    break;
+                  case 4: day = '목'
+                    break;
+                  case 5: day = '금'
+                    break;
+                  case 6: day = '토'
+                    break;
+                  default:
+                }
+                var time = newDate.getFullYear() +'-' + pad((newDate.getMonth()+1),2)+'-'+ pad(newDate.getDate(),2)+' ('+day+') '+ pad(hour,2)+'시 ' +pad(minute,2) +'분';
 
-            var url = "http://localhost:8080/MenuDetail/reserve";
+                var user_id = global_user_id;
+                var complete = '0';
 
-            $.post(url, jsonObject, function (result) {
-              console.log(result);
-            });
-          }
-          else {
-          } 
+                var jsonObject = {
+                  cafeteria: cafeteria,
+                  menu: menu,
+                  time: time,
+                  user_id: user_id,
+                  image_src: image_src,
+                  menu_price : menu_price,
+                  complete: '0'
+                };
+
+                console.log(jsonObject);
+
+                var url = "http://localhost:8080/MenuDetail/reserve";
+
+                $.post(url, jsonObject, function(result) {
+                  modal({
+                    type: 'alert',
+                    title: '알림',
+                    text: result
+                  });
+                });
+              } else{
+                modal({
+          				type: 'alert',
+          				title: '알림',
+          				text: "예약을 취소하였습니다"
+          			});
+              }
+            }
+          });
         }
-
       })
 
       $('#write-review .starRev span').click(function() {
         $(this).parent().children('span').removeClass('on');
         $(this).addClass('on').prevAll('span').addClass('on');
-        var average = ($(this).prevAll().length + 1).toFixed(1);
+
         return false;
       });
 
+      $('.write-button').click(function() {
+        modal({
+          type: 'confirm',
+          title: '댓글 작성',
+          text: '댓글을 작성하시겠습니까?',
+          callback : function(result){
+            if(result){
+              var content = $('.review').val();
+              var star = ($('#write-review .starRev .on').length).toFixed(1);
+              var nickname = user_nickname;
+              var jsonObject = {
+                cafeteria: cafeteria,
+                menu: menu,
+                nickname: nickname,
+                content: content,
+                star : star
+              };
 
+              var url = "http://localhost:8080/MenuDetail/write_reply";
+
+              $.post(url, jsonObject, function(result) {
+                  load_reply_data(cafeteria, menu);
+              });
+
+            } else{
+                modal({
+                  type: 'alert',
+                  title: '알림',
+                  text: "댓글 작성을 취소하였습니다."
+                });
+            }
+          }
+        });
+      });
     });
   </script>
   <style>
@@ -167,7 +307,7 @@
     }
 
     .content {
-      width: 1200px;
+      width: 800px;
       margin: 0 auto;
     }
 
@@ -235,8 +375,7 @@
       border-radius: 3px;
       overflow: hidden;
       text-align-last: center;
-      font-size: 1em;
-      padding-top: 10px;
+      text-align: center;
       float: left;
       margin-left: 5px;
       margin-right: 5px;
@@ -247,11 +386,11 @@
     }
 
     .select-style select {
-      padding: 5px 8px;
+      text-align: center;
+      padding-top: 10px;
       width: 170px;
       border: none;
       box-shadow: none;
-      font-size: 18px;
       background: transparent;
       background-image: none;
       -webkit-appearance: none;
@@ -262,17 +401,17 @@
     }
 
     #cafeteria {
-      height: 200px;
+      height: 180px;
     }
 
     #cafeteria>p {
-      letter-spacing: 25px;
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 300;
       text-align: left;
-      transform: translateY(100%);
+      transform: translateY(180%);
       color: black;
-      font-size: 2.5rem;
+      font-size: 1.8rem;
+      letter-spacing: 20px;
     }
 
     .menu-image {
@@ -280,20 +419,20 @@
     }
 
     .text {
-      width: 450px;
+      width: 300px;
       float: right;
     }
 
     .menu-description {
       padding-top: 50px;
-      height: 510px;
+      height: 300px;
     }
 
     .menu-name {
       font-family: "Noto Sans KR", sans-serif;
       text-align: left;
       font-weight: 500;
-      font-size: 35px;
+      font-size: 25px;
       margin-bottom: 20px;
     }
 
@@ -301,19 +440,18 @@
       font-family: "Noto Sans KR", sans-serif;
       text-align: left;
       font-weight: 300;
-      font-size: 30px;
-      margin-bottom: 10px;
-      max-height: 100px;
+      font-size: 20px;
+      margin-bottom: 5px;
+      max-height: 40px;
     }
 
     .menu-price {
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 300;
       text-align: left;
-      font-size: 35px;
+      font-size: 20px;
       font-weight: normal;
       margin-bottom: 5px;
-      margin-top: 15px;
       margin-left: 10px;
     }
 
@@ -321,7 +459,7 @@
       float: left;
       margin-left: 4px;
       padding-left: 10px;
-      font-size: 25px;
+      font-size: 20px;
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 400;
       vertical-align: middle;
@@ -332,30 +470,38 @@
       margin-top: 10px;
     }
 
+    .reply {
+      margin-top: 20px;
+      height: 30px;
+    }
+
+
     .nickname {
       width: 20%;
       float: left;
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 400;
-      font-size: 25px;
+      font-size: 20px;
     }
 
     .review-content {
-      width: 62%;
+      width: 60%;
       float: left;
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 300;
-      font-size: 25px;
+      font-size: 20px;
     }
 
     .review-star {
-      width: 18%;
+      width: 20%;
       float: left;
+      height: 30px;
+      margin-top: -30px;
     }
 
     .hr {
       border: none;
-      border: 1px solid black;
+      border: 0.8px solid black;
     }
 
     .hr2 {
@@ -367,8 +513,7 @@
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 400;
       text-align: center;
-      vertical-align: middle;
-      font-size: 30px;
+      font-size: 15px;
     }
 
     .button {
@@ -389,12 +534,12 @@
       font-weight: 400;
       text-align: center;
       vertical-align: middle;
-      font-size: 30px;
+      font-size: 15px;
     }
 
     .review {
-      height: 70px;
-      font-size: 20px;
+      height: 45px;
+      font-size: 15px;
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 500;
     }
@@ -406,7 +551,7 @@
       text-align: center;
       text-decoration: none;
       display: inline-block;
-      font-size: 16px;
+      font-size: 15px;
       margin-top: 20px;
       margin-left: 6px;
       cursor: pointer;
@@ -415,7 +560,6 @@
       font-weight: 400;
       text-align: center;
       vertical-align: middle;
-      font-size: 30px;
     }
   </style>
 </head>
@@ -428,6 +572,7 @@
     <header>
       <div id="cafeteria">
         <p>학생회관</p>
+      </div>
     </header>
     <!-- 구분선 -->
     <hr class="hr">
@@ -437,7 +582,7 @@
       <div class="menu-description">
         <!-- 메뉴 이미지 -->
         <div class="menu-image">
-          <img width="700" height="500" src="./images/MenuDetail/test.jpg" alt="">
+          <img width="450" height="300" src="./images/MenuDetail/test.jpg" alt="">
         </div>
         <!--메뉴 상세 부분 -->
         <div class="text">
@@ -465,21 +610,21 @@
           </div>
           <!-- 구분선 -->
           <br style="clear:both">
-          <hr class="hr2" style="margin-top : 40px">
+          <hr class="hr2" style="margin-top : 20px">
           <!-- 예약 부분 -->
           <div class="reserve">
             <!-- 메뉴 가격 -->
-            <br style="margin-top : 40px">
+            <br style="margin-top : 10px">
             <p class="menu-price">4,200원</p>
-            <div style="margin-top: 40px">
+            <div style="margin-top: 5px">
               <!-- 시간 선택 -->
-              <div class="select-style" style="width:210px; height:80px;">
-                <select id="time">
+              <div class="select-style" style="width:138px; height:45px;">
+                <select id="time" style="width:140px">
                   <option class="option" selected>시간 선택</option>
                 </select>
               </div>
               <!-- 예약 버튼 -->
-              <button class="button" style="width:210px; height:92px;">예약 하기</button>
+              <button class="button" style="width:138px; height:45px;">예약 하기</button>
             </div>
           </div>
         </div>
@@ -505,42 +650,19 @@
         <span class="starR2">별5_오른쪽</span>
       </div>
       <br style="clear:both">
+      <br>
       <!-- 댓글 작성 부분 -->
-      <form class="" style="margin-top: 15px; margin-bottom: 40px;">
-        <!-- 댓글작성폼 -->
-        <input class="review" type="text" name="review" value="" placeholder="댓글을 작성해주세요">
-        <!-- 작성하기 버튼 -->
-        <input class="write-button" style="background: #548235" type="submit" value="작성하기">
-      </form>
+      <input class="review" type="text" name="review" value="" placeholder="댓글을 작성해주세요">
+      <!-- 작성하기 버튼 -->
+      <input class="write-button" style="background: #548235" type="submit" value="작성하기">
+
     </section>
 
     <!-- 다른 사용자 리뷰 부분 -->
     <section id="other-review">
-      <!-- 닉네임 -->
-      <div class="nickname">
-        <span>다인이</span>
-      </div>
-      <!-- 리뷰댓글 내용 -->
-      <div class="review-content">
-        <span>냥냥냥냥냥냥냥</span>
-      </div>
-      <!-- 리뷰 별점 -->
-      <div class="review-star">
-       <div class="starRev">
-        <span class="starR1">별1_왼쪽</span>
-        <span class="starR2">별1_오른쪽</span>
-        <span class="starR1">별2_왼쪽</span>
-        <span class="starR2">별2_오른쪽</span>
-        <span class="starR1">별3_왼쪽</span>
-        <span class="starR2">별3_오른쪽</span>
-        <span class="starR1">별4_왼쪽</span>
-        <span class="starR2">별4_오른쪽</span>
-        <span class="starR1">별5_왼쪽</span>
-        <span class="starR2">별5_오른쪽</span>
-      </div>
-    </div>
-  </div>
-  </section>
+
+    </section>
+
   </div>
 </body>
 

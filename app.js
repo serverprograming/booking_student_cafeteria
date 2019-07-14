@@ -22,7 +22,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'cjfwls1226',
+  password: '0000',
   database: "booking_student_cafeteria",
   insecureAuth: true
 });
@@ -38,16 +38,16 @@ app.use(express.json());
 app.set('port', process.env.PORT || 8080);
 
 app.get('/', function (req, res) {
-  res.redirect('main_login.html');
+  res.redirect('login.html');
 });
 
 //Food MenuDetail
 app.post('/FoodMenu/data_load', (req, res) => {
   var cafeteria = req.body.cafeteria;
 
-  var menu_data_sql = "select name,price,image FROM menu where cafeteria='" + cafeteria + "'";
-  con.query(menu_data_sql, function (err, result) {
-    if (err) {
+  var menu_data_sql = "select name,price,image,star FROM menu where cafeteria='"+ cafeteria + "'";
+  con.query(menu_data_sql,function(err,result){
+    if(err){
       throw err;
     }
     res.send(result);
@@ -55,12 +55,25 @@ app.post('/FoodMenu/data_load', (req, res) => {
 });
 
 //Menu Detail
-app.post('/MenuDetail/menu_data_load', (req, res) => {
-  var cafeteria = '학생 회관';
-  var menu = '소금 구이 덮밥';
-  var menu_data_sql = "select image,content FROM menu where cafeteria='" + cafeteria + "' and name='" + menu + "'";
-  con.query(menu_data_sql, function (err, result) {
-    if (err) {
+app.get('/MenuDetail/user_data_load', (req,res) => {
+    var user_id = req.session.userid;
+    var sql = "select id,nickname from member where id ='" + user_id +"'";
+    con.query(sql,function(err,result){
+      if(err){
+        throw err;
+      }
+      console.log(result);
+      res.send(result);
+    })
+});
+
+app.post('/MenuDetail/menu_data_load', (req,res) => {
+  var cafeteria = req.body.cafeteria;
+  var menu = req.body.menu;
+
+  var menu_data_sql = "select m.price, m.image, m.content, r.star from menu as m left outer join reply as r on m.cafeteria = r.cafeteria and m.name = r.menu where m.cafeteria ='"+cafeteria+"' and m.name = '"+menu+"'";
+  con.query(menu_data_sql,function(err,result){
+    if(err){
       throw err;
     }
     res.send(result);
@@ -79,16 +92,43 @@ app.post('/MenuDetail/reply_data_load', (req, res) => {
   })
 });
 
-app.post('/MenuDetail/write_reply', (req, res) => {
+app.post('/MenuDetail/write_reply', (req,res) => {
+  var cafeteria = req.body.cafeteria;
+  var menu = req.body.menu;
   var nickname = req.body.nickname;
-  var content = req.body.review;
+  var content = req.body.content;
   var star = req.body.star;
-  var write_reply_sql = "INSERT INTO reply (id,cafeteria,menu,nickname,content,star) VALUES (NULL,'" + cafeteria + "','" + menu
-    + "','" + nickname + "','" + content + "','" + star + "')";
-  con.query(write_reply_sql, function (err, result) {
-    if (err) {
+  console.log(cafeteria,menu,nickname,content,star);
+  var write_reply_sql = "INSERT INTO reply (id,cafeteria,menu,nickname,content,star) VALUES (NULL,'"+cafeteria+"','"+menu
+  +"','"+nickname+"','"+content+"','"+star+"');";
+  var star_sql = "select star from reply where cafeteria='" + cafeteria + "' and '" + menu + "';";
+  var sql = write_reply_sql + star_sql;
+  con.query(sql,function(err,result){
+    if(err){
       throw err;
     }
+    var star_total = 0;
+    for(var i = 0 ; i < result.length ; i++){
+      star_total = result[i]['star'];
+    }
+    var star_average = (star_total / result.length).toFixed(1);
+    var temp = star_average.split('.');
+    var real_star;
+    if(temp[1] < 2){
+      real_star = temp[0] +'.' + '0';
+    } else if(temp [1] >2 && temp[1] <8){
+      real_star = temp[0] +'.' + '5';
+    } else{
+      real_star = (temp[0]+1) +'.' + '0';
+    }
+
+    var update_sql = "update menu set star = '"+real_star+"' where cafeteria='"+cafeteria+"' and name = '"+menu+"';";
+    con.query(update_sql,function(err,result){
+      if(err){
+        throw err;
+      }
+      console.log(result);
+    });
     res.send(result);
   })
 });
@@ -99,17 +139,17 @@ app.post('/MenuDetail/reserve', (req, res) => {
   var time = req.body.time;
   var user_id = req.body.user_id;
   var complete = req.body.complete;
+  var image_src = req.body.image_src;
+  var price = req.body.menu_price;
 
-  console.log(cafeteria, menu, time, user_id, complete);
-
-  var sql = "INSERT INTO reserve (id,cafeteria,menu,time,complete,user_id) VALUES (NULL,'" + cafeteria + "','" + menu
-    + "','" + time + "','" + complete + "','" + user_id + "')";
+  var sql = "INSERT INTO reserve (id,cafeteria,menu,time,complete,user_id,image_src,price) VALUES (NULL,'"+cafeteria+"','"+menu
+  +"','"+time+"','"+complete+"','"+user_id+"','"+image_src+"','"+price+"')";
   console.log(sql);
   con.query(sql, function (err, result) {
     if (err) {
       throw err;
     }
-    console.log("1 record inserted");
+    res.send('예약 완료');
   })
 });
 
@@ -256,4 +296,3 @@ app.post('/reservation_manager_jin', function(req, res) {
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Server Start...' + app.get('port'));
 });
-
