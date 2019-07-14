@@ -1,1 +1,1 @@
-delete from reply where nickname = '김철진';
+select * from reply;

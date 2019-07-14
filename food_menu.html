@@ -148,6 +148,7 @@
             var price = result[i]["price"];
             var image = result[i]["image"];
 
+
             var $main_section = $('#main-section').masonry({
               itemSelector: '.menu',
               columnWidth: 200,
@@ -169,7 +170,6 @@
             menu_image.click(function() {
               var menu_name2 = menu_name.text();
               window.location.href = "MenuDetail.html?index=" + cafeteria + "&index2=" + menu_name2;
-
             })
 
             menu_name.click(function() {

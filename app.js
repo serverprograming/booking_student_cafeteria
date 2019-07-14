@@ -55,6 +55,17 @@ app.post('/FoodMenu/data_load', (req,res) => {
 });
 
 //Menu Detail
+app.get('/MenuDetail/user_data_load', (req,res) => {
+    var user_id = req.session.userid;
+    var sql = "select id,nickname from member where id ='" +user_id+"'";
+    con.query(sql,function(err,result){
+      if(err){
+        throw err;
+      }
+      res.send(result);
+    })
+});
+
 app.post('/MenuDetail/menu_data_load', (req,res) => {
   var cafeteria = req.body.cafeteria;
   var menu = req.body.menu;
