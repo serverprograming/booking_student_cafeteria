@@ -98,7 +98,6 @@
       $.post('/cafeteria_menu', function (data) {
         var manager = data[0]['manager'];
         console.log(manager);
-
         if (manager == 0) {
           window.location.href = "food_menu.html?index=" + index;
         }
