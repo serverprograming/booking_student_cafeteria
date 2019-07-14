@@ -29,6 +29,16 @@
       var menu = decodeURI(data2[1].substr(data2[1].lastIndexOf('=') + 1));
       var image_src;
       var menu_price;
+      var global_user_id;
+      var user_nickname;
+
+      function load_user_data(){
+        var url = "http://localhost:8080/MenuDetail/user_data_load";
+        $.get(url, function(result) {
+          global_user_id = result[0]['id'];
+          user_nickname = result[0]['nickname'];
+        });
+      }
 
       //자릿수 채워주는 함수
       function pad(n, width) {
@@ -42,7 +52,7 @@
         for (var hour = 9; hour < 20; hour++) {
           var minute = 0;
           for (var i = 0; i < 6; i++) {
-            var option = $('<option>' + hour + ' : ' + pad(minute, 2) + '</option>');
+            var option = $('<option>' + pad(hour,2) + ' : ' + pad(minute, 2) + '</option>');
             minute += 10;
             $('#time').append(option);
           }
@@ -60,7 +70,6 @@
         var url = "http://localhost:8080/MenuDetail/menu_data_load";
 
         $.post(url, jsonObject, function(result) {
-          console.log(result);
           var image;
           var content;
           var price;
@@ -73,7 +82,6 @@
             price = result[0]['price'];
             total_star += star_rate;
           }
-          console.log(total_star/result.length);
 
           for (var i = 1 ; i < total_star/result.length +1 ; i++){
             $('.menu-description .starRev span:nth-child('+ i +')').addClass('on');
@@ -84,7 +92,7 @@
           $('.menu-name').text(menu);
           $('.menu-detail').text(content);
           $('.menu-price').text(price+'원');
-          $('.starRate span').text(total_star/result.length);
+          $('.starRate span').text((total_star/result.length).toFixed(1));
 
         });
       }
@@ -101,11 +109,9 @@
 
         $.post(url, jsonObject, function (result) {
           for (var i = 0; i < result.length; i++) {
-            console.log(i);
             var nickname = result[i]["nickname"];
             var content = result[i]["content"];
             var star = result[i]["star"];
-            console.log(nickname,content,star);
             var reply_content = $('<div></div>').addClass('reply');
             var review_nickname = $('<div></div>').addClass('nickname');
             var nickname_span = $('<span>' + nickname +'</span>');
@@ -135,6 +141,7 @@
         });
       }
 
+      load_user_data();
       load_menu_data(cafeteria, menu);
       load_reply_data(cafeteria, menu);
 
@@ -180,9 +187,9 @@
                     break;
                   default:
                 }
-                var time = newDate.getFullYear() +'-' + (newDate.getMonth()+1)+'-'+newDate.getDate()+' ('+day+') '+hour+'시 ' +minute +'분';
+                var time = newDate.getFullYear() +'-' + pad((newDate.getMonth()+1),2)+'-'+ pad(newDate.getDate(),2)+' ('+day+') '+ pad(hour,2)+'시 ' +pad(minute,2) +'분';
 
-                var user_id = 'seyoung1219';
+                var user_id = global_user_id;
                 var complete = '0';
 
                 var jsonObject = {
@@ -194,6 +201,8 @@
                   menu_price : menu_price,
                   complete: '0'
                 };
+
+                console.log(jsonObject);
 
                 var url = "http://localhost:8080/MenuDetail/reserve";
 
@@ -231,12 +240,12 @@
           callback : function(result){
             if(result){
               var content = $('.review').val();
-              var star = ($(this).prevAll().length + 1).toFixed(1);
-
+              var star = ($('#write-review .starRev .on').length).toFixed(1);
+              var nickname = user_nickname;
               var jsonObject = {
                 cafeteria: cafeteria,
                 menu: menu,
-                nickname: '김철진',
+                nickname: nickname,
                 content: content,
                 star : star
               };

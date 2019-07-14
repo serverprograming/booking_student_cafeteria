@@ -22,7 +22,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'cjfwls1226',
+  password: '123456',
   database: "booking_student_cafeteria",
   insecureAuth: true
 });
@@ -38,7 +38,7 @@ app.use(express.json());
 app.set('port', process.env.PORT || 8080);
 
 app.get('/', function (req, res) {
-  res.redirect('main_login.html');
+  res.redirect('login.html');
 });
 
 //Food MenuDetail
@@ -55,6 +55,18 @@ app.post('/FoodMenu/data_load', (req,res) => {
 });
 
 //Menu Detail
+app.get('/MenuDetail/user_data_load', (req,res) => {
+    var user_id = req.session.userid;
+    var sql = "select id,nickname from member where id ='" + user_id +"'";
+    con.query(sql,function(err,result){
+      if(err){
+        throw err;
+      }
+      console.log(result);
+      res.send(result);
+    })
+});
+
 app.post('/MenuDetail/menu_data_load', (req,res) => {
   var cafeteria = req.body.cafeteria;
   var menu = req.body.menu;
@@ -84,11 +96,11 @@ app.post('/MenuDetail/write_reply', (req,res) => {
   var cafeteria = req.body.cafeteria;
   var menu = req.body.menu;
   var nickname = req.body.nickname;
-  var content = req.body.review;
+  var content = req.body.content;
   var star = req.body.star;
+  console.log(cafeteria,menu,nickname,content,star);
   var write_reply_sql = "INSERT INTO reply (id,cafeteria,menu,nickname,content,star) VALUES (NULL,'"+cafeteria+"','"+menu
   +"','"+nickname+"','"+content+"','"+star+"')";
-  console.log(write_reply_sql);
   con.query(write_reply_sql,function(err,result){
     if(err){
       throw err;
