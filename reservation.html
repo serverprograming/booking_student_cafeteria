@@ -5,6 +5,13 @@
     <title>RESERVATION</title>
     <meta charset="utf-8">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        $.post("/sessionchecker", function (data) {
+            if (!data) {
+                document.location.href = "/login.html";
+            }
+        });
+    </script>
     <style>
         * {
             margin: 0;
@@ -14,7 +21,7 @@
         .top {
             height: 60px;
             width: 100%;
-            background-color: rgba(184, 145, 77, 0.9);
+            background-color: #385723;
         }
 
         .topContent {
@@ -22,12 +29,35 @@
             margin: auto;
             padding-top: 5px;
             color: white;
+            display: flex;
+        }
+
+        .topleft {
+            width: 200px;
+            margin: 0;
+        }
+
+        .topright {
+            width: 200px;
+            margin-left: 57%
         }
 
         .bodyContent {
             width: 900px;
             margin: auto;
             margin-top: 80px;
+        }
+
+        .btn {
+            width: 80px;
+            height: 30px;
+            margin-top: 9px;
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 4px;
+            background-color: #385723;
+            color: white;
+            cursor: pointer;
         }
 
         .reservationContent {
@@ -106,10 +136,12 @@
         .expired {
             margin-top: 20px;
         }
+
         .shadow {
             transition-property: box-shadow, transform;
             transition-duration: 0.5s;
         }
+
         .shadow:hover {
             border: 1px solid rgba(0, 0, 0, 0.5);
             transition-property: box-shadow, transform;
@@ -123,9 +155,15 @@
 <body>
     <div class="top">
         <div class="topContent">
-            <a>
-                <h1>Booking</h1>
-            </a>
+            <div class="topleft">
+                <a>
+                    <h1>Booking</h1>
+                </a>
+            </div>
+            <div class="topright">
+                <button class="btn" type="button" id="reservationbtn">예약확인</button>
+                <button class="btn" type="button" id="logoutbtn">로그아웃</button>
+            </div>
         </div>
     </div>
 
@@ -179,12 +217,13 @@
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
     var plus = $('#plus');
+    var plusFalseCard = $('#plusFalseCard');
 
     function pad(n, width) {
         n = n + '';
         return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
     }
-
+var falsehtml = "";
     var html = "";
 
     var dates = ['2019-07-07', '2019-07-05', '2019-07-01'];
@@ -195,19 +234,17 @@
             current = false;
         }
 
-        if(currunt = true)
+        if(!current)
         {
-
-        }
-        html += `
-        <div class="reservationCard ${current == false ? 'grey' : ''}">
+            html += `
+        <div class="reservationCard">
                 <div class="cardLeft">
                     <div class="reservationDate">
                         <p>${dates[i - 1]} (목)</p>
                     </div>
                     <div class="reservationMenu">
                         <div class="menuImage">
-                            <img class="mImage ${current == false ? 'greyImage' : ''}" src="f1.jpg">
+                            <img class="mImage" src="f1.jpg">
                         </div>
                         <div class="menuInformation">
                             <div class="menuName">
@@ -228,9 +265,51 @@
                     </div>
                 </div>
             </div>`
+        }
+            falsehtml += `
+        <div class="reservationCard grey">
+                <div class="cardLeft">
+                    <div class="reservationDate">
+                        <p>${dates[i - 1]} (목)</p>
+                    </div>
+                    <div class="reservationMenu">
+                        <div class="menuImage greyImage">
+                            <img class="mImage" src="f1.jpg">
+                        </div>
+                        <div class="menuInformation">
+                            <div class="menuName">
+                                <p>소금구이덮밥</p>
+                            </div>
+                            <div class="cafeteriaName">
+                                <p>학생회관</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cardRight">
+                    <div class="menuCost">
+                        <h3>￦3,500</h3>
+                    </div>
+                    <div class="reservationNumber">
+                        <p>주문번호 : 126</p>
+                    </div>
+                </div>
+            </div>`
+        
     }
-
+    plusFalseCard.append(falsehtml);
     plus.append(html);
+</script>
+<script>
+    //예약 확인 버튼 클릭 했을 때
+    $('#reservationbtn').click(function () {
+        document.location.href = "/reservation.html";
+    });
+
+    //로그아웃 버튼 클릭 했을 때
+    $('#logoutbtn').click(function () {
+        document.location.href = "/logout";
+    });
 </script>
 
 </html>
