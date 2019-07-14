@@ -62,7 +62,6 @@ app.get('/MenuDetail/user_data_load', (req,res) => {
       if(err){
         throw err;
       }
-
       res.send(result);
     })
 });
@@ -71,11 +70,12 @@ app.post('/MenuDetail/menu_data_load', (req,res) => {
   var cafeteria = req.body.cafeteria;
   var menu = req.body.menu;
 
-  var menu_data_sql = "select m.price, m.image, m.content, r.star from menu as m left outer join reply as r on m.cafeteria = r.cafeteria and m.name = r.menu where m.cafeteria ='"+cafeteria+"' and m.name = '"+menu+"'";
+  var menu_data_sql = "select price, image, content, star from menu where cafeteria ='"+cafeteria+"' and name = '"+menu+"'";
   con.query(menu_data_sql,function(err,result){
     if(err){
       throw err;
     }
+    console.log(result);
     res.send(result);
   })
 });
@@ -205,9 +205,8 @@ app.post('/login', (req, res) => {
       check = result[0]['count(*)'];
 
       if (check == 1) {
-        if (!req.session.userid) {
-          req.session.userid = id;
-        }
+        req.session.userid = id;
+
         res.send('<script>document.location.href="/cafeteria_menu.html";</script>');
       }
       else {
@@ -255,7 +254,6 @@ app.post('/reservation', function (req, res) {
 
 app.post('/cafeteria_menu', function (req, res) {
   var sql = "select manager from member where id='" + req.session.userid + "'";
-
   con.query(sql, function (err, result, fields) {
     if (err) {
       throw err;

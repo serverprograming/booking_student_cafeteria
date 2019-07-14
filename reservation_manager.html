@@ -22,7 +22,6 @@
                 var html = "";
                 $.post("/reservation_manager_hak", function (data) {
                     for (var i = 0; i < data.length; i++) {
-                        console.log(data[i]['id']);
                         var id = data[i]['id'];
                         var cafeteria = data[i]['cafeteria'];
                         var menu = data[i]['menu'];
@@ -286,8 +285,8 @@
                     console.log(html);
                     console.log(falsehtml);
 
-                    plusFalseCard.append(falsehtml);
-                    plus.append(html);
+                    $('#plus').append(falsehtml);
+                    $('#plusFalseCard').append(html);
 
 
                 });
@@ -421,11 +420,9 @@
 
                     }
 
-                    console.log(html);
-                    console.log(falsehtml);
 
-                    plusFalseCard.append(falsehtml);
-                    plus.append(html);
+                    $('#plusFalseCard').append(falsehtml);
+                    $('#plus').append(html);
 
 
                 });
