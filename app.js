@@ -62,7 +62,6 @@ app.get('/MenuDetail/user_data_load', (req,res) => {
       if(err){
         throw err;
       }
-
       res.send(result);
     })
 });
@@ -255,7 +254,6 @@ app.post('/reservation', function (req, res) {
 
 app.post('/cafeteria_menu', function (req, res) {
   var sql = "select manager from member where id='" + req.session.userid + "'";
-  console.log(sql);
   con.query(sql, function (err, result, fields) {
     if (err) {
       throw err;
