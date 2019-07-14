@@ -185,7 +185,7 @@
       // 인덱스 값에 따라 페이지 타이틀 다르게 설정
       var cafeteria = decodeURI(location.href.substr(location.href.lastIndexOf('=') + 1));
 
-      //load_menu_data(cafeteria);
+      load_menu_data(cafeteria);
 
       $('header').html('<p>' + cafeteria + '</p>');
 
@@ -231,10 +231,6 @@
         if (scrollHeight >= documentHeight) {
           // appendMenu();
         }
-      });
-
-      $('.menu').click(function() {
-        alert('냥냥');
       });
     });
   </script>

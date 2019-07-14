@@ -17,6 +17,7 @@
     $.post("/sessionchecker", function (data) {
       if (!data) {
         document.location.href = "/login.html";
+
       }
     });
   </script>
@@ -84,7 +85,7 @@
           $('.menu-name').text(menu);
           $('.menu-detail').text(content);
           $('.menu-price').text(price+'원');
-          $('.starRate span').text(total_star/result.length);
+          $('.starRate span').text((total_star/result.length).toFixed(1));
 
         });
       }
@@ -231,8 +232,8 @@
           callback : function(result){
             if(result){
               var content = $('.review').val();
-              var star = ($(this).prevAll().length + 1).toFixed(1);
-
+              var star = ($('#write-review .starRev .on').length).toFixed(1);
+              console.log(star);
               var jsonObject = {
                 cafeteria: cafeteria,
                 menu: menu,
@@ -240,6 +241,8 @@
                 content: content,
                 star : star
               };
+
+              console.log(jsonObject);
 
               var url = "http://localhost:8080/MenuDetail/write_reply";
 
