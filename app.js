@@ -128,7 +128,7 @@ app.post('/MenuDetail/write_reply', (req,res) => {
         throw err;
       }
       console.log(result);
-    }
+    });
     res.send(result);
   })
 });
