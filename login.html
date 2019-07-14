@@ -47,7 +47,7 @@
             left: 50%;
             margin: -200px 0px 0px -225px;
             box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.7);
-            opacity:0.87;
+            opacity: 0.87;
         }
 
         .loginText {
@@ -55,8 +55,8 @@
             height: 35px;
             margin-left: 50px;
             margin-top: 7px;
-            font-size:25px;
-            border:1px solid rgba(0, 0, 0, 0.3);
+            font-size: 25px;
+            border: 1px solid rgba(0, 0, 0, 0.3);
             border-radius: 3px;
         }
 
@@ -79,12 +79,12 @@
         }
 
         .btn {
-            width:200px;
-            height:40px;
-            margin-left:100px;
-            margin-top:25px;
+            width: 200px;
+            height: 40px;
+            margin-left: 100px;
+            margin-top: 25px;
             background-color: rgba(184, 145, 77, 0.8);
-            border:1px solid rgba(184, 145, 77, 0.9);
+            border: 1px solid rgba(184, 145, 77, 0.9);
             border-radius: 3px;
         }
     </style>
@@ -94,21 +94,21 @@
     <div class="black"></div>
     <img src="mainFood.jpg" class="main_img">
     <div class="container">
-        <form>
+        <form action="/login" method="POST">
             <div class="login">
                 <p>Login</p>
             </div>
             <label>
                 <p class="loginLabel">ID</p>
             </label>
-            <input class="loginText" type="text">
+            <input class="loginText" type="text" name="id">
             <label>
                 <p class="loginLabel">PASSWORD</p>
             </label>
-            <input class="loginText" type="password">
+            <input class="loginText" type="password" name="password">
             <div>
                 <input class="btn" type="submit" value="LOGIN">
-                <button class="btn">SIGN UP</button>
+                <button class="btn" type="button" id="signupbtn">SIGN UP</button>
             </div>
 
         </form>
@@ -116,19 +116,13 @@
 </body>
 
 <script>
-        var loginbtn = $('#loginbtn');
-        var signupbtn = $('#signupbtn');
-    
-        function login() {
-            document.location.href = "";
-        }
-    
-        function signup() {
-            
-        }
-    
-        loginbtn.addEventListener('click', login);
-        signupbtn.addEventListener('click', signup);
-    </script>
+    $('#signupbtn').click(function() {
+        document.location.href="/signup.html";
+    });
+
+
+
+
+</script>
 
 </html>
