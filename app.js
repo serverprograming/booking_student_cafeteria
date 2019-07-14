@@ -54,7 +54,6 @@ app.post('/MenuDetail/menu_data_load', (req,res) => {
 
   var menu_data_sql = "select image,content,price FROM menu where cafeteria='"+ cafeteria +"' and name='"+ menu +"'";
   var menu_data_sql2 = "select m.price, m.image, m.content, r.star from menu as m left outer join reply as r on m.cafeteria = r.cafeteria and m.name = r.menu where m.cafeteria ='"+cafeteria+"' and m.name = '"+menu+"'";
-  console.log(menu_data_sql2);
   con.query(menu_data_sql2,function(err,result){
     if(err){
       throw err;
@@ -68,7 +67,6 @@ app.post('/MenuDetail/reply_data_load', (req,res) => {
   var cafeteria = req.body.cafeteria;
   var menu = req.body.menu;
   var reply_data_sql = "select nickname,content,star FROM reply where cafeteria='"+ cafeteria +"' and menu='"+ menu +"'";
-  console.log(reply_data_sql);
   con.query(reply_data_sql,function(err,result){
     if(err){
       throw err;
@@ -78,11 +76,14 @@ app.post('/MenuDetail/reply_data_load', (req,res) => {
 });
 
 app.post('/MenuDetail/write_reply', (req,res) => {
+  var cafeteria = req.body.cafeteria;
+  var menu = req.body.menu;
   var nickname = req.body.nickname;
   var content = req.body.review;
   var star = req.body.star;
   var write_reply_sql = "INSERT INTO reply (id,cafeteria,menu,nickname,content,star) VALUES (NULL,'"+cafeteria+"','"+menu
   +"','"+nickname+"','"+content+"','"+star+"')";
+  console.log(write_reply_sql);
   con.query(write_reply_sql,function(err,result){
     if(err){
       throw err;

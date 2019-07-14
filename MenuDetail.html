@@ -209,11 +209,44 @@
       $('#write-review .starRev span').click(function() {
         $(this).parent().children('span').removeClass('on');
         $(this).addClass('on').prevAll('span').addClass('on');
-        var average = ($(this).prevAll().length + 1).toFixed(1);
+
         return false;
       });
 
+      $('.write-button').click(function() {
+        modal({
+          type: 'confirm',
+          title: '댓글 작성',
+          text: '댓글을 작성하시겠습니까?',
+          callback : function(result){
+            if(result){
+              var content = $('.review').val();
+              var star = ($(this).prevAll().length + 1).toFixed(1);
 
+              var jsonObject = {
+                cafeteria: cafeteria,
+                menu: menu,
+                nickname: '김철진',
+                content: content,
+                star : star
+              };
+
+              var url = "http://localhost:8080/MenuDetail/write_reply";
+
+              $.post(url, jsonObject, function(result) {
+                
+              });
+
+            } else{
+                modal({
+                  type: 'alert',
+                  title: '알림',
+                  text: "댓글 작성을 취소하였습니다."
+                });
+            }
+          }
+        });
+      });
     });
   </script>
   <style>
@@ -594,12 +627,10 @@
       </div>
       <br style="clear:both">
       <!-- 댓글 작성 부분 -->
-      <form class="" style="margin-top: 15px; margin-bottom: 40px;">
-        <!-- 댓글작성폼 -->
-        <input class="review" type="text" name="review" value="" placeholder="댓글을 작성해주세요">
-        <!-- 작성하기 버튼 -->
-        <input class="write-button" style="background: #548235" type="submit" value="작성하기">
-      </form>
+      <input class="review" type="text" name="review" value="" placeholder="댓글을 작성해주세요">
+      <!-- 작성하기 버튼 -->
+      <input class="write-button" style="background: #548235" type="submit" value="작성하기">
+
     </section>
 
     <!-- 다른 사용자 리뷰 부분 -->
