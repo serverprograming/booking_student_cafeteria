@@ -93,13 +93,12 @@
           $('.menu-detail').text(content);
           $('.menu-price').text(price+'원');
           $('.starRate span').text((total_star/result.length).toFixed(1));
-
         });
       }
 
       // 사용자 댓글 데이터 로드
       function load_reply_data(cafeteria, menu) {
-
+        $('#other-review').empty();
         var jsonObject = {
           cafeteria: cafeteria,
           menu: menu
@@ -253,7 +252,7 @@
               var url = "http://localhost:8080/MenuDetail/write_reply";
 
               $.post(url, jsonObject, function(result) {
-
+                  load_reply_data(cafeteria, menu);
               });
 
             } else{
