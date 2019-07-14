@@ -388,7 +388,7 @@
 
     .select-style select {
       text-align: center;
-      padding: 8px 0px 0px 10px;
+      padding-top: 10px;
       width: 170px;
       border: none;
       box-shadow: none;
@@ -471,6 +471,12 @@
       margin-top: 10px;
     }
 
+    .reply {
+      margin-top: 20px;
+      height: 30px;
+    }
+
+
     .nickname {
       width: 20%;
       float: left;
@@ -480,7 +486,7 @@
     }
 
     .review-content {
-      width: 61%;
+      width: 60%;
       float: left;
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 300;
@@ -488,8 +494,10 @@
     }
 
     .review-star {
-      width: 19%;
+      width: 20%;
       float: left;
+      height: 30px;
+      margin-top: -30px;
     }
 
     .hr {
@@ -505,7 +513,7 @@
     #time {
       font-family: "Noto Sans KR", sans-serif;
       font-weight: 400;
-      text-align: left;
+      text-align: center;
       font-size: 15px;
     }
 
@@ -612,7 +620,7 @@
             <div style="margin-top: 5px">
               <!-- 시간 선택 -->
               <div class="select-style" style="width:138px; height:45px;">
-                <select id="time">
+                <select id="time" style="width:140px">
                   <option class="option" selected>시간 선택</option>
                 </select>
               </div>
@@ -643,6 +651,7 @@
         <span class="starR2">별5_오른쪽</span>
       </div>
       <br style="clear:both">
+      <br>
       <!-- 댓글 작성 부분 -->
       <input class="review" type="text" name="review" value="" placeholder="댓글을 작성해주세요">
       <!-- 작성하기 버튼 -->

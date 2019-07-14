@@ -22,7 +22,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '123456',
+  password: '0000',
   database: "booking_student_cafeteria",
   insecureAuth: true
 });
@@ -45,7 +45,7 @@ app.get('/', function (req, res) {
 app.post('/FoodMenu/data_load', (req,res) => {
   var cafeteria = req.body.cafeteria;
 
-  var menu_data_sql = "select name,price,image FROM menu where cafeteria='"+ cafeteria + "'";
+  var menu_data_sql = "select name,price,image,star FROM menu where cafeteria='"+ cafeteria + "'";
   con.query(menu_data_sql,function(err,result){
     if(err){
       throw err;
