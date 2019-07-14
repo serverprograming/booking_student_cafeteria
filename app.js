@@ -22,7 +22,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '0000',
+  password: '123456',
   database: "booking_student_cafeteria",
   insecureAuth: true
 });
@@ -62,7 +62,7 @@ app.get('/MenuDetail/user_data_load', (req,res) => {
       if(err){
         throw err;
       }
-      console.log(result);
+
       res.send(result);
     })
 });
@@ -101,36 +101,40 @@ app.post('/MenuDetail/write_reply', (req,res) => {
   console.log(cafeteria,menu,nickname,content,star);
   var write_reply_sql = "INSERT INTO reply (id,cafeteria,menu,nickname,content,star) VALUES (NULL,'"+cafeteria+"','"+menu
   +"','"+nickname+"','"+content+"','"+star+"');";
-  var star_sql = "select star from reply where cafeteria='" + cafeteria + "' and '" + menu + "';";
-  var sql = write_reply_sql + star_sql;
-  con.query(sql,function(err,result){
+  con.query(write_reply_sql,function(err,result){
     if(err){
       throw err;
     }
-    var star_total = 0;
-    for(var i = 0 ; i < result.length ; i++){
-      star_total = result[i]['star'];
-    }
-    var star_average = (star_total / result.length).toFixed(1);
-    var temp = star_average.split('.');
-    var real_star;
-    if(temp[1] < 2){
-      real_star = temp[0] +'.' + '0';
-    } else if(temp [1] >2 && temp[1] <8){
-      real_star = temp[0] +'.' + '5';
-    } else{
-      real_star = (temp[0]+1) +'.' + '0';
-    }
-
-    var update_sql = "update menu set star = '"+real_star+"' where cafeteria='"+cafeteria+"' and name = '"+menu+"';";
-    con.query(update_sql,function(err,result){
+    var star_sql = "select avg(star) from reply where cafeteria='" + cafeteria + "' and menu='" + menu + "';";
+    con.query(star_sql,function(err,result){
       if(err){
         throw err;
       }
-      console.log(result);
+
+      var star_average = result[0]['avg(star)'].toFixed(1);
+      var temp = star_average.split('.');
+      var one = parseInt(temp[0]);
+      var two = parseInt(temp[1]);
+      console.log(one,two);
+      var real_star;
+      if(two >= 0 && two <3){
+        real_star = temp[0] + '.0';
+      } else if(two >=3 && two < 8){
+        real_star = temp[0] + '.5';
+      } else{
+        real_star = String(one+1) + '.0';
+      }
+      var update_sql = "update menu set star= '"+ real_star + "' where cafeteria = '"+ cafeteria + "' and name ='" +menu + "';"
+      console.log(update_sql);
+      con.query(update_sql,function(err,result){
+        if(err){
+          throw err;
+        }
+        console.log(result);
+      })
     });
     res.send(result);
-  })
+  });
 });
 
 app.post('/MenuDetail/reserve', (req, res) => {
