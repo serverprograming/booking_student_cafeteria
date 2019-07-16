@@ -295,6 +295,18 @@ app.post('/reservation_manager_jin', function(req, res) {
   })
 });
 
+app.post('/reservation_manager', function(req, res) {
+  var cafeteria = req.body.cafeteria;
+  var sql = "select * from reserve where cafeteria='"+cafeteria+"'";
+
+  con.query(sql, function(err, result, fields) {
+    if(err) {
+      throw err;
+    }
+    res.send(result);
+  })
+});
+
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Server Start...' + app.get('port'));
 });
