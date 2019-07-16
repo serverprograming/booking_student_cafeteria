@@ -15,418 +15,138 @@
     <script>
         $(document).ready(function () {
             var cafeteria = decodeURI(location.href.substr(location.href.lastIndexOf('=') + 1));
-            console.log(cafeteria);
+            var jsonObject = {
+              cafeteria : cafeteria
+            }
+            $.post("/reservation_manager", jsonObject,function(data){
+              var html="";
+              var falsehtml="";
+              for (var i = 0 ; i < data.length ; i++){
+                var id = data[i]['id'];
+                var cafeteria = data[i]['cafeteria'];
+                var menu = data[i]['menu'];
+                var time = data[i]['time'];
+                var complete = data[i]['complete'];
+                var user_id = data[i]['user_id'];
+                var price = data[i]['price'];
+                var image_src = data[i]['image_src'];
 
-            if (cafeteria == '학생회관') {
-                var falsehtml = "";
-                var html = "";
-                $.post("/reservation_manager_hak", function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var id = data[i]['id'];
-                        var cafeteria = data[i]['cafeteria'];
-                        var menu = data[i]['menu'];
-                        var time = data[i]['time'];
-                        var complete = data[i]['complete'];
-                        var user_id = data[i]['user_id'];
-                        var price = data[i]['price'];
-                        var image_src = data[i]['image_src'];
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1;
+                var yyyy = today.getFullYear();
+                var hour = today.getHours();
+                var day = today.getDay();
+                var min = today.getMinutes();
 
-                        var today = new Date();
-                        var dd = today.getDate();
-                        var mm = today.getMonth() + 1;
-                        var yyyy = today.getFullYear();
-                        var hour = today.getHours();
-                        var day = today.getDay();
-                        var min = today.getMinutes();
-                        var plus = $('#plus');
-                        var plusFalseCard = $('#plusFalseCard');
+                switch (day) {
+                  case 0: day = '일'
+                    break;
+                  case 1: day = '월'
+                    break;
+                  case 2: day = '화'
+                    break;
+                  case 3: day = '수'
+                    break;
+                  case 4: day = '목'
+                    break;
+                  case 5: day = '금'
+                    break;
+                  case 6: day = '토'
+                    break;
 
-                        if (day == 0) {
-                            day = '일';
-                        }
-                        else if (day == 1) {
-                            day = '월';
-                        }
-                        else if (day == 2) {
-                            day = '화';
-                        }
-                        else if (day == 3) {
-                            day = '수';
-                        }
-                        else if (day == 4) {
-                            day = '목';
-                        }
-                        else if (day == 5) {
-                            day = '금';
-                        }
-                        else if (day == 6) {
-                            day = '토';
-                        }
+                  default:
+                }
 
-                        function pad(n, width) {
-                            n = n + '';
-                            return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
-                        }
+                function pad(n, width) {
+                    n = n + '';
+                    return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+                }
 
-                        var current = true;
-                        if (time >= `${yyyy}-${pad(mm, 2)}-${pad(dd, 2)} (${day}) ${pad(hour, 2)}시 ${pad(min, 2)}분`) {
-                            current = false;
-                        }
-                        console.log(current);
-                        if (!current) {
-                            html += `
-        <div class="reservationCard shadow">
-                <div class="cardLeft">
-                    <div class="reservationUser">
-                        <p>예약자 : ${user_id}</p>
+                var current = true;
+                if (time >= `${yyyy}-${pad(mm, 2)}-${pad(dd, 2)} (${day}) ${pad(hour, 2)}시 ${pad(min, 2)}분`) {
+                    current = false;
+                }
+
+
+                console.log(current);
+                if (!current) {
+                    html += `
+<div class="reservationCard shadow">
+        <div class="cardLeft">
+            <div class="reservationUser">
+                <p>예약자 : ${user_id}</p>
+            </div>
+            <div class="reservationDate">
+                <p>${time}</p>
+            </div>
+            <div class="reservationMenu">
+                <div class="menuImage">
+                    <img class="mImage" src="${image_src}">
+                </div>
+                <div class="menuInformation">
+                    <div class="menuName">
+                        <p>${menu}</p>
                     </div>
-                    <div class="reservationDate">
-                        <p>${time}</p>
-                    </div>
-                    <div class="reservationMenu">
-                        <div class="menuImage">
-                            <img class="mImage" src="${image_src}">
-                        </div>
-                        <div class="menuInformation">
-                            <div class="menuName">
-                                <p>${menu}</p>
-                            </div>
-                            <div class="cafeteriaName">
-                                <p>${cafeteria}</p>
-                            </div>
-                        </div>
+                    <div class="cafeteriaName">
+                        <p>${cafeteria}</p>
                     </div>
                 </div>
-                <div class="cardRight">
-                    <div class="menuCost">
-                        <h3>￦${price}</h3>
+            </div>
+        </div>
+        <div class="cardRight">
+            <div class="menuCost">
+                <h3>￦${price}</h3>
+            </div>
+            <div class="reservationNumber">
+                <p>주문번호 : ${id}</p>
+            </div>
+        </div>
+    </div>`
+                }
+                else {
+                    falsehtml += `
+<div class="reservationCard grey">
+        <div class="cardLeft">
+            <div class="reservationUser">
+                <p>예약자 : ${user_id}</p>
+            </div>
+            <div class="reservationDate">
+                <p>${time}</p>
+            </div>
+            <div class="reservationMenu">
+                <div class="menuImage greyImage">
+                    <img class="mImage" src="${image_src}">
+                </div>
+                <div class="menuInformation">
+                    <div class="menuName">
+                        <p>${menu}</p>
                     </div>
-                    <div class="reservationNumber">
-                        <p>주문번호 : ${id}</p>
+                    <div class="cafeteriaName">
+                        <p>${cafeteria}</p>
                     </div>
                 </div>
-            </div>`
-                        }
-                        else {
-                            falsehtml += `
-        <div class="reservationCard grey">
-                <div class="cardLeft">
-                    <div class="reservationUser">
-                        <p>예약자 : ${user_id}</p>
-                    </div>
-                    <div class="reservationDate">
-                        <p>${time}</p>
-                    </div>
-                    <div class="reservationMenu">
-                        <div class="menuImage greyImage">
-                            <img class="mImage" src="${image_src}">
-                        </div>
-                        <div class="menuInformation">
-                            <div class="menuName">
-                                <p>${menu}</p>
-                            </div>
-                            <div class="cafeteriaName">
-                                <p>${cafeteria}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardRight">
-                    <div class="menuCost">
-                        <h3>￦${price}</h3>
-                    </div>
-                    <div class="reservationNumber">
-                        <p>주문번호 : ${id}</p>
-                    </div>
-                </div>
-            </div>`
-                        }
+            </div>
+        </div>
+        <div class="cardRight">
+            <div class="menuCost">
+                <h3>￦${price}</h3>
+            </div>
+            <div class="reservationNumber">
+                <p>주문번호 : ${id}</p>
+            </div>
+        </div>
+    </div>`
+                }
 
-                    }
-
-                    console.log(html);
-                    console.log(falsehtml);
-
-                    plusFalseCard.append(falsehtml);
-                    plus.append(html);
-
-
-                });
             }
 
-            else if (cafeteria == '군자키친') {
-                var falsehtml = "";
-                var html = "";
-                $.post("/reservation_manager_gun", function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        console.log(data[i]['id']);
-                        var id = data[i]['id'];
-                        var cafeteria = data[i]['cafeteria'];
-                        var menu = data[i]['menu'];
-                        var time = data[i]['time'];
-                        var complete = data[i]['complete'];
-                        var user_id = data[i]['user_id'];
-                        var price = data[i]['price'];
-                        var image_src = data[i]['image_src'];
+            console.log(html);
+            $('#plusFalseCard').append(falsehtml);
+            $('#plus').append(html);
 
-                        var today = new Date();
-                        var dd = today.getDate();
-                        var mm = today.getMonth() + 1;
-                        var yyyy = today.getFullYear();
-                        var hour = today.getHours();
-                        var day = today.getDay();
-                        var min = today.getMinutes();
-                        var plus = $('#plus');
-                        var plusFalseCard = $('#plusFalseCard');
+          })
 
-                        if (day == 0) {
-                            day = '일';
-                        }
-                        else if (day == 1) {
-                            day = '월';
-                        }
-                        else if (day == 2) {
-                            day = '화';
-                        }
-                        else if (day == 3) {
-                            day = '수';
-                        }
-                        else if (day == 4) {
-                            day = '목';
-                        }
-                        else if (day == 5) {
-                            day = '금';
-                        }
-                        else if (day == 6) {
-                            day = '토';
-                        }
-
-                        function pad(n, width) {
-                            n = n + '';
-                            return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
-                        }
-
-                        var current = true;
-                        if (time >= `${yyyy}-${pad(mm, 2)}-${pad(dd, 2)} (${day}) ${pad(hour, 2)}시 ${pad(min, 2)}분`) {
-                            current = false;
-                        }
-                        console.log(current);
-                        if (!current) {
-                            html += `
-        <div class="reservationCard shadow">
-                <div class="cardLeft">
-                    <div class="reservationUser">
-                        <p>예약자 : ${user_id}</p>
-                    </div>
-                    <div class="reservationDate">
-                        <p>${time}</p>
-                    </div>
-                    <div class="reservationMenu">
-                        <div class="menuImage">
-                            <img class="mImage" src="${image_src}">
-                        </div>
-                        <div class="menuInformation">
-                            <div class="menuName">
-                                <p>${menu}</p>
-                            </div>
-                            <div class="cafeteriaName">
-                                <p>${cafeteria}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardRight">
-                    <div class="menuCost">
-                        <h3>￦${price}</h3>
-                    </div>
-                    <div class="reservationNumber">
-                        <p>주문번호 : ${id}</p>
-                    </div>
-                </div>
-            </div>`
-                        }
-                        else {
-                            falsehtml += `
-        <div class="reservationCard grey">
-                <div class="cardLeft">
-                    <div class="reservationUser">
-                        <p>예약자 : ${user_id}</p>
-                    </div>
-                    <div class="reservationDate">
-                        <p>${time}</p>
-                    </div>
-                    <div class="reservationMenu">
-                        <div class="menuImage greyImage">
-                            <img class="mImage" src="${image_src}">
-                        </div>
-                        <div class="menuInformation">
-                            <div class="menuName">
-                                <p>${menu}</p>
-                            </div>
-                            <div class="cafeteriaName">
-                                <p>${cafeteria}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardRight">
-                    <div class="menuCost">
-                        <h3>￦${price}</h3>
-                    </div>
-                    <div class="reservationNumber">
-                        <p>주문번호 : ${id}</p>
-                    </div>
-                </div>
-            </div>`
-                        }
-
-                    }
-
-                    console.log(html);
-                    console.log(falsehtml);
-
-                    $('#plus').append(falsehtml);
-                    $('#plusFalseCard').append(html);
-
-
-                });
-            }
-
-            else if (cafeteria == '진관키친') {
-                var falsehtml = "";
-                var html = "";
-                $.post("/reservation_manager_jin", function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        console.log(data[i]['id']);
-                        var id = data[i]['id'];
-                        var cafeteria = data[i]['cafeteria'];
-                        var menu = data[i]['menu'];
-                        var time = data[i]['time'];
-                        var complete = data[i]['complete'];
-                        var user_id = data[i]['user_id'];
-                        var price = data[i]['price'];
-                        var image_src = data[i]['image_src'];
-
-                        var today = new Date();
-                        var dd = today.getDate();
-                        var mm = today.getMonth() + 1;
-                        var yyyy = today.getFullYear();
-                        var hour = today.getHours();
-                        var day = today.getDay();
-                        var min = today.getMinutes();
-                        var plus = $('#plus');
-                        var plusFalseCard = $('#plusFalseCard');
-
-                        if (day == 0) {
-                            day = '일';
-                        }
-                        else if (day == 1) {
-                            day = '월';
-                        }
-                        else if (day == 2) {
-                            day = '화';
-                        }
-                        else if (day == 3) {
-                            day = '수';
-                        }
-                        else if (day == 4) {
-                            day = '목';
-                        }
-                        else if (day == 5) {
-                            day = '금';
-                        }
-                        else if (day == 6) {
-                            day = '토';
-                        }
-
-                        function pad(n, width) {
-                            n = n + '';
-                            return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
-                        }
-
-                        var current = true;
-                        if (time >= `${yyyy}-${pad(mm, 2)}-${pad(dd, 2)} (${day}) ${pad(hour, 2)}시 ${pad(min, 2)}분`) {
-                            current = false;
-                        }
-                        console.log(current);
-                        if (!current) {
-                            html += `
-        <div class="reservationCard shadow">
-                <div class="cardLeft">
-                    <div class="reservationUser">
-                        <p>예약자 : ${user_id}</p>
-                    </div>
-                    <div class="reservationDate">
-                        <p>${time}</p>
-                    </div>
-                    <div class="reservationMenu">
-                        <div class="menuImage">
-                            <img class="mImage" src="${image_src}">
-                        </div>
-                        <div class="menuInformation">
-                            <div class="menuName">
-                                <p>${menu}</p>
-                            </div>
-                            <div class="cafeteriaName">
-                                <p>${cafeteria}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardRight">
-                    <div class="menuCost">
-                        <h3>￦${price}</h3>
-                    </div>
-                    <div class="reservationNumber">
-                        <p>주문번호 : ${id}</p>
-                    </div>
-                </div>
-            </div>`
-                        }
-                        else {
-                            falsehtml += `
-        <div class="reservationCard grey">
-                <div class="cardLeft">
-                    <div class="reservationUser">
-                        <p>예약자 : ${user_id}</p>
-                    </div>
-                    <div class="reservationDate">
-                        <p>${time}</p>
-                    </div>
-                    <div class="reservationMenu">
-                        <div class="menuImage greyImage">
-                            <img class="mImage" src="${image_src}">
-                        </div>
-                        <div class="menuInformation">
-                            <div class="menuName">
-                                <p>${menu}</p>
-                            </div>
-                            <div class="cafeteriaName">
-                                <p>${cafeteria}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardRight">
-                    <div class="menuCost">
-                        <h3>￦${price}</h3>
-                    </div>
-                    <div class="reservationNumber">
-                        <p>주문번호 : ${id}</p>
-                    </div>
-                </div>
-            </div>`
-                        }
-
-                    }
-
-
-                    $('#plusFalseCard').append(falsehtml);
-                    $('#plus').append(html);
-
-
-                });
-            }
         });
 
     </script>
@@ -614,94 +334,6 @@
     </div>
 </body>
 
-<!-- <script>
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
-    var yyyy = today.getFullYear();
-    var plus = $('#plus');
-    var plusFalseCard = $('#plusFalseCard');
-
-    function pad(n, width) {
-        n = n + '';
-        return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
-    }
-    var falsehtml = "";
-    var html = "";
-
-    var dates = ['2019-07-07', '2019-07-05', '2019-07-01'];
-
-    for (var i = 1; i < 4; i++) {
-        var current = true;
-        if (dates[i - 1] != `${yyyy}-${pad(mm, 2)}-${pad(dd, 2)}`) {
-            current = false;
-        }
-
-        if (!current) {
-            html += `
-        <div class="reservationCard">
-                <div class="cardLeft">
-                    <div class="reservationDate">
-                        <p>${dates[i - 1]} (목)</p>
-                    </div>
-                    <div class="reservationMenu">
-                        <div class="menuImage">
-                            <img class="mImage" src="f1.jpg">
-                        </div>
-                        <div class="menuInformation">
-                            <div class="menuName">
-                                <p>소금구이덮밥</p>
-                            </div>
-                            <div class="cafeteriaName">
-                                <p>학생회관</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardRight">
-                    <div class="menuCost">
-                        <h3>￦3,500</h3>
-                    </div>
-                    <div class="reservationNumber">
-                        <p>주문번호 : 126</p>
-                    </div>
-                </div>
-            </div>`
-        }
-        falsehtml += `
-        <div class="reservationCard grey">
-                <div class="cardLeft">
-                    <div class="reservationDate">
-                        <p>${dates[i - 1]} (목)</p>
-                    </div>
-                    <div class="reservationMenu">
-                        <div class="menuImage greyImage">
-                            <img class="mImage" src="f1.jpg">
-                        </div>
-                        <div class="menuInformation">
-                            <div class="menuName">
-                                <p>소금구이덮밥</p>
-                            </div>
-                            <div class="cafeteriaName">
-                                <p>학생회관</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cardRight">
-                    <div class="menuCost">
-                        <h3>￦3,500</h3>
-                    </div>
-                    <div class="reservationNumber">
-                        <p>주문번호 : 126</p>
-                    </div>
-                </div>
-            </div>`
-
-    }
-    plusFalseCard.append(falsehtml);
-    plus.append(html);
-</script> -->
 <script>
     //예약 확인 버튼 클릭 했을 때
     $('#reservationbtn').click(function () {
